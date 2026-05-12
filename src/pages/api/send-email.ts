@@ -1,8 +1,20 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 
-// Configurez votre clé API Resend dans .env
-const resend = new Resend(process.env.RESEND_API_KEY || 're_123456789');
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+if (!RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is not set');
+}
+const resend = new Resend(RESEND_API_KEY);
+
+function escapeHtml(str: string): string {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
 
 export const POST: APIRoute = async ({ request }) => {
     try {
@@ -16,17 +28,35 @@ export const POST: APIRoute = async ({ request }) => {
             });
         }
 
+        if (typeof name !== 'string' || typeof email !== 'string' || typeof message !== 'string') {
+            return new Response(JSON.stringify({ error: "Types invalides" }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        if (name.length > 100 || email.length > 254 || message.length > 5000) {
+            return new Response(JSON.stringify({ error: "Champs trop longs" }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const safeName = escapeHtml(name);
+        const safeEmail = escapeHtml(email);
+        const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
+
         // Envoi de l'email via Resend
         const data = await resend.emails.send({
             from: 'Contact <onboarding@resend.dev>', // Modifiez avec votre domaine vérifié
             to: ['votre@email.com'], // Remplacez par votre email de réception
-            subject: `Nouveau message de ${name} (Site Vitrine)`,
+            subject: `Nouveau message de ${safeName} (Site Vitrine)`,
             html: `
                 <h3>Nouveau message reçu depuis le site</h3>
-                <p><strong>Nom :</strong> ${name}</p>
-                <p><strong>Email :</strong> ${email}</p>
+                <p><strong>Nom :</strong> ${safeName}</p>
+                <p><strong>Email :</strong> ${safeEmail}</p>
                 <p><strong>Message :</strong></p>
-                <p>${message}</p>
+                <p>${safeMessage}</p>
             `
         });
 
