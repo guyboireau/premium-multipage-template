@@ -11,6 +11,14 @@
 // ═════════════════════════════════════════════════════════════════════════════
 
 export const siteConfig = {
+  // Navigation (multipage)
+  nav: [
+    { label: 'Services',  href: '/services' },
+    { label: 'Portfolio', href: '/realisations' },
+    { label: 'À propos',  href: '/a-propos' },
+    { label: 'Tarifs',    href: '/#tarifs' }, // Reste sur l'ancre de l'index si nécessaire
+    { label: 'Contact',   href: '/contact' },
+  ],
 
   // ── 1. INFORMATIONS BUSINESS ───────────────────────────────────────────────
   business: {
@@ -153,8 +161,8 @@ export const siteConfig = {
       eyebrow:  'Avocat en droit des affaires · Lyon',
       h1:       'Votre partenaire juridique pour développer sereinement',
       subtitle: 'Contrats, contentieux, création d\'entreprise : un accompagnement clair, humain et efficace pour les TPE et PME.',
-      cta1:     { label: 'Prendre rendez-vous', href: '#contact' },
-      cta2:     { label: 'Nos honoraires →',    href: '#tarifs' },
+      cta1:     { label: 'Prendre rendez-vous', href: '/contact' },
+      cta2:     { label: 'Nos honoraires →',    href: '/#tarifs' },
       trust:    ['12 ans d\'expérience', '180+ clients accompagnés', 'Réponse sous 24h'],
       badge:    { label: 'Note Google', value: '4.9 / 5', sub: '47 avis vérifiés' },
       infoCard: { status: 'Disponible', hours: 'Lun–Ven · 9h–18h', location: '12 rue Mercière, Lyon' },
@@ -204,7 +212,7 @@ export const siteConfig = {
         { value: '180+', label: 'projets livrés' },
         { value: '4.9',  label: 'note moyenne' },
       ],
-      cta:    { label: 'Notre méthode →', href: '#contact' },
+      cta:    { label: 'Notre méthode →', href: '/contact' },
       image:  '/images/about.jpg',
       author: { name: 'Sophie Aubry', role: 'Avocate associée', image: '/images/sophie.jpg' },
     },
@@ -289,8 +297,8 @@ export const siteConfig = {
       eyebrow:  'Passons à l\'action',
       title:    'Prêt à sécuriser votre activité ?',
       subtitle: 'Prenez rendez-vous en ligne. Premier échange sous 24h.',
-      cta1:     { label: 'Prendre rendez-vous', href: '#contact' },
-      cta2:     { label: 'Voir les honoraires',  href: '#tarifs' },
+      cta1:     { label: 'Prendre rendez-vous', href: '/contact' },
+      cta2:     { label: 'Voir les honoraires',  href: '/#tarifs' },
     },
 
     contact: {
@@ -303,11 +311,12 @@ export const siteConfig = {
     footer: {
       description: 'Cabinet d\'avocat spécialisé en droit des affaires pour entrepreneurs et TPE depuis 2012.',
       links: [
-        { label: 'Services',  href: '#services' },
-        { label: 'À propos',  href: '#apropos' },
-        { label: 'Tarifs',    href: '#tarifs' },
-        { label: 'FAQ',       href: '#faq' },
-        { label: 'Contact',   href: '#contact' },
+        { label: 'Services',  href: '/services' },
+        { label: 'Portfolio', href: '/realisations' },
+        { label: 'À propos',  href: '/a-propos' },
+        { label: 'Tarifs',    href: '/#tarifs' },
+        { label: 'FAQ',       href: '/#faq' },
+        { label: 'Contact',   href: '/contact' },
       ],
       legal: [
         { label: 'Mentions légales', href: '/mentions-legales' },
@@ -331,7 +340,7 @@ export const siteConfig = {
 // ─── Re-exports nommés (compat avec les composants existants) ──────────────
 export type Variant = 'A' | 'B' | 'C';
 
-export const { business, branding, seo, design, features, pages } = siteConfig;
+export const { business, branding, seo, design, features, pages, nav } = siteConfig;
 export const variants  = siteConfig.design.variants;
 export const hero         = siteConfig.content.hero;
 export const services     = siteConfig.content.services;
