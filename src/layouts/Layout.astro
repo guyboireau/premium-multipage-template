@@ -1,20 +1,17 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import { siteConfig } from '../config/site';
 
 interface Props {
   title: string;
-  description?: string;
+  description: string;
   canonical?: string;
 }
 
 const { title, description, canonical } = Astro.props;
-const { business, branding, seo, features, design } = siteConfig;
+const { branding, seo, features, design } = siteConfig;
+const canonicalUrl = canonical ?? `${seo.siteUrl}${Astro.url.pathname}`;
 
-const metaDescription = description ?? seo.defaultDescription;
-const canonicalUrl    = canonical ?? `${seo.siteUrl}${Astro.url.pathname}`;
-
-// Tokens neutrals warm-paper
+// Tokens neutrals warm-paper (invariants, indépendants de la couleur brand)
 const tokens = {
   bg:         '#faf9f7',
   bgCard:     '#ffffff',
@@ -25,39 +22,13 @@ const tokens = {
   line:       '#d9d4c7',
   lineSoft:   '#ebe7dc',
 };
-
-// Schema.org LocalBusiness
-const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name:        business.name,
-  description: seo.defaultDescription,
-  telephone:   business.phone,
-  email:       business.email,
-  url:         seo.siteUrl,
-  address: {
-    '@type':          'PostalAddress',
-    streetAddress:    business.address.street,
-    addressLocality:  business.address.city,
-    postalCode:       business.address.postalCode,
-    addressCountry:   business.address.country,
-  },
-  openingHoursSpecification: Object.entries(business.openingHours)
-    .filter(([, hours]) => hours !== null)
-    .map(([day, hours]) => ({
-      '@type':    'OpeningHoursSpecification',
-      dayOfWeek:  `https://schema.org/${day.charAt(0).toUpperCase()}${day.slice(1)}`,
-      opens:      (hours as string).split('-')[0],
-      closes:     (hours as string).split('-')[1],
-    })),
-};
 ---
 
 <!doctype html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={metaDescription} />
+    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={branding.faviconPath} />
     <meta name="generator" content={Astro.generator} />
@@ -72,15 +43,12 @@ const schema = {
 
     <!-- Open Graph -->
     <meta property="og:title"       content={title} />
-    <meta property="og:description" content={metaDescription} />
+    <meta property="og:description" content={description} />
     <meta property="og:url"         content={canonicalUrl} />
     <meta property="og:locale"      content={seo.locale} />
     <meta property="og:type"        content="website" />
     {seo.ogImage && <meta property="og:image" content={`${seo.siteUrl}${seo.ogImage}`} />}
     <meta name="twitter:card" content="summary_large_image" />
-
-    <!-- Schema.org LocalBusiness -->
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
     <!-- Polices : Geist (heading/body) + Kalam (handwritten) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -110,33 +78,29 @@ const schema = {
     )}
 
     <!-- Sentry (opt-in via features.sentry) -->
-    {features.sentry && seo.sentryDsn && (
-      <script is:inline define:vars={{ dsn: seo.sentryDsn }}>
-        import('https://browser.sentry-cdn.com/7.x.x/bundle.min.js').then(() => {
-          Sentry.init({ dsn, tracesSampleRate: 0.1 });
-        });
-      </script>
-    )}
-
-    <ClientRouter />
+    <!-- Google Fonts : Geist + Kalam (sketchy) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
+  <body class="v-a is-sketchy">
+    <slot />
 
-  <body class={design.isSketchy ? 'sketchy' : ''}>
-    <!-- Hidden SVG filters for sketchy mode -->
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <DesignSwitcher />
+
+    <!-- Filtres SVG pour le mode Sketchy (Rough) -->
+    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
       <defs>
         <filter id="rough" x="-2%" y="-2%" width="104%" height="104%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="3" result="noise"/>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="1" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" />
         </filter>
-        <filter id="rough-strong" x="-3%" y="-3%" width="106%" height="106%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="noise"/>
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4"/>
+        <filter id="rough-strong" x="-5%" y="-5%" width="110%" height="110%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </defs>
     </svg>
-
-    <slot />
   </body>
 </html>
 
@@ -159,7 +123,7 @@ const schema = {
   lineSoft:    tokens.lineSoft,
 }}>
 
-/* ─── Reset ─────────────────────────────────────────────────────────────── */
+/* ─── Reset & Base ──────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
@@ -171,12 +135,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* ─── Variantes Globales (Show/Hide) ────────────────────────────────── */
+.v-only-a, .v-only-b, .v-only-c { display: none !important; }
+
+body.v-a .v-only-a { display: block !important; }
+body.v-b .v-only-b { display: block !important; }
+body.v-c .v-only-c { display: block !important; }
+
+/* Cas particulier pour les headers/footers qui sont flex ou grid */
+body.v-a header.v-only-a { display: block !important; }
+body.v-b header.v-only-b { display: block !important; }
+body.v-c header.v-only-c { display: block !important; }
+
 a { text-decoration: none; color: inherit; }
 ul, ol { list-style: none; margin: 0; padding: 0; }
-img { display: block; max-width: 100%; }
-button { font-family: inherit; cursor: pointer; }
-h1, h2, h3, h4, h5, h6 { margin: 0; line-height: 1.1; }
-p { margin: 0; }
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────── */
 :root {
