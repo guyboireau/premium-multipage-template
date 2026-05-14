@@ -1,30 +1,70 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
 
-import { business, pages, portfolio } from '../config/site';
+import { business, pages, portfolio, seo } from '../config/site';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: pages.realisations.title,
+  itemListElement: portfolio.items.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.title,
+    description: item.description,
+  })),
+};
 ---
 
 <Layout
   title={`${pages.realisations.title} | ${business.name}`}
   description={pages.realisations.description}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <Header />
   <main id="main-content">
-    <section class="section" style="padding-top: 120px;">
+    <section class="section real-hero">
       <div class="container">
+        <Breadcrumb items={[
+          { label: 'Accueil', href: '/' },
+          { label: pages.realisations.title },
+        ]} />
         <p class="eyebrow">— Nos réalisations</p>
-        <h1 style="font-size: clamp(32px, 5vw, 48px); font-weight: 600; margin: 12px 0 48px;">Nos Derniers Chantiers</h1>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
-          {portfolio.items.map(item => (
-            <article class="card">
-              <div class="img-placeholder" style="aspect-ratio: 4/3; border-radius: var(--radius-md) var(--radius-md) 0 0;"></div>
-              <div style="padding: 24px;">
-                <p class="eyebrow" style="margin-bottom: 8px;">{item.category}</p>
-                <h3 style="font-size: 20px; font-weight: 600; color: var(--ink);">{item.title}</h3>
+        <h1 class="real-h1">Nos Derniers Chantiers</h1>
+        <p class="real-intro">Avant / après — chaque projet raconte une transformation.</p>
+
+        <div class="real-grid">
+          {portfolio.items.map((item) => (
+            <article class="real-card card">
+              {/* Avant / Après */}
+              <div class="real-ba">
+                <div class="real-ba-col">
+                  <div class="real-ba-label">Avant</div>
+                  <div class="img-placeholder real-img" style={`background-image: url('${item.before}')`}
+                       role="img" aria-label={`Avant — ${item.title}`}></div>
+                </div>
+                <div class="real-ba-divider" aria-hidden="true">→</div>
+                <div class="real-ba-col">
+                  <div class="real-ba-label real-ba-label--after">Après</div>
+                  <div class="img-placeholder real-img" style={`background-image: url('${item.after}')`}
+                       role="img" aria-label={`Après — ${item.title}`}></div>
+                </div>
+              </div>
+
+              {/* Infos */}
+              <div class="real-meta">
+                <div class="real-chips">
+                  <span class="real-chip">{item.category}</span>
+                  {item.location && <span class="real-chip real-chip--loc">📍 {item.location}</span>}
+                  {item.year    && <span class="real-chip real-chip--year">{item.year}</span>}
+                </div>
+                <h2 class="real-title">{item.title}</h2>
+                {item.description && <p class="real-desc">{item.description}</p>}
               </div>
             </article>
           ))}
@@ -35,3 +75,59 @@ import { business, pages, portfolio } from '../config/site';
   </main>
   <Footer />
 </Layout>
+
+<style>
+.real-hero { padding-top: 120px; }
+.real-h1 {
+  font-size: clamp(32px, 5vw, 52px); font-weight: 700;
+  letter-spacing: -0.025em; color: var(--ink); margin: 12px 0 10px;
+}
+.real-intro { font-size: 16px; color: var(--inkSoft); margin: 0 0 56px; }
+
+.real-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 32px; }
+
+.real-card { overflow: hidden; }
+
+/* Avant / Après */
+.real-ba {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 0; align-items: center;
+  background: var(--paper);
+}
+.real-ba-col { position: relative; }
+.real-ba-label {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  background: rgba(0,0,0,.55); color: #fff;
+  font-family: var(--fontMono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; pointer-events: none;
+}
+.real-ba-label--after { background: rgba(26,25,22,.75); }
+.real-img {
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0;
+}
+.real-ba-divider {
+  padding: 0 12px; font-size: 18px; color: var(--inkFaint);
+  flex-shrink: 0; line-height: 1;
+}
+
+/* Meta */
+.real-meta { padding: 20px 24px 24px; }
+.real-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.real-chip {
+  font-family: var(--fontMono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 100px;
+  background: var(--lineSoft); color: var(--inkSoft);
+}
+.real-chip--loc, .real-chip--year { background: var(--paper); }
+.real-title { font-size: 18px; font-weight: 600; color: var(--ink); margin: 0 0 8px; }
+.real-desc { font-size: 14px; color: var(--inkSoft); line-height: 1.6; margin: 0; }
+
+@media (max-width: 600px) {
+  .real-grid { grid-template-columns: 1fr; }
+  .real-ba { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+  .real-ba-divider { display: none; }
+}
+</style>

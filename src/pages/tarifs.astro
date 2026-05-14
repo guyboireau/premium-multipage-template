@@ -2,22 +2,45 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Pricing from '../components/Pricing.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
+import UrgentFloat from '../components/UrgentFloat.astro';
 
-import { business, pages } from '../config/site';
+import { business, pages, content } from '../config/site';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: pages.tarifs.title,
+  itemListElement: content.pricing.plans.map((plan, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: plan.name,
+    description: plan.desc,
+  })),
+};
 ---
 
 <Layout
   title={`${pages.tarifs.title} | ${business.name}`}
   description={pages.tarifs.description}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <Header />
   <main id="main-content">
     <div style="padding-top: 80px;">
+      <div class="container" style="padding-top: 40px;">
+        <Breadcrumb items={[
+          { label: 'Accueil', href: '/' },
+          { label: pages.tarifs.title },
+        ]} />
+      </div>
       <Pricing />
     </div>
     <CTA />
   </main>
   <Footer />
+  <UrgentFloat />
 </Layout>

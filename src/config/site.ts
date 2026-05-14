@@ -51,6 +51,26 @@ export const siteConfig = {
     },
     siret:        '000 000 000 00000',
     availability: 'Disponible',
+    urgency: {
+      active:    true,
+      label:     'Urgence 24h/7j',
+      phone:     '+33 6 00 00 00 00',   // peut différer du téléphone principal
+    },
+    serviceArea: [
+      '[Ville principale]',
+      '[Ville 2]',
+      '[Ville 3]',
+      '[Département XX]',
+    ],
+    certifications: [
+      { label: 'Garantie décennale', sublabel: 'Assurance RC Pro incluse',         icon: '🛡️' },
+      { label: 'RGE',                sublabel: 'Reconnu Garant de l\'Environnement', icon: '🌿' },
+      { label: 'Qualibat',           sublabel: 'Artisan certifié qualité',           icon: '✅' },
+    ],
+    assurance: {
+      name:   '[Nom de l\'assureur]',
+      numero: '[N° police RC Pro]',
+    },
   },
 
   // ── 2. BRANDING ────────────────────────────────────────────────────────────
@@ -315,6 +335,12 @@ export const siteConfig = {
       title:          '[TITRE CONTACT]',
       subtitle:       '[Décrivez ce que le client doit faire pour vous contacter.]',
       successMessage: 'Message bien reçu — nous vous répondons rapidement.',
+      formTypes:      ['Demande de devis', 'Urgence', 'Question', 'Autre'],
+    },
+    certifications: {
+      eyebrow:  '— Certifications & Garanties',
+      title:    'Des travaux certifiés, une tranquillité d\'esprit',
+      subtitle: '[Présentez vos certifications et votre engagement qualité.]',
     },
 
     footer: {
@@ -335,9 +361,33 @@ export const siteConfig = {
     },
     portfolio: {
       items: [
-        { title: '[PROJET 1]', category: '[CATÉGORIE]' },
-        { title: '[PROJET 2]', category: '[CATÉGORIE]' },
-        { title: '[PROJET 3]', category: '[CATÉGORIE]' },
+        {
+          title:       '[PROJET 1]',
+          category:    '[CATÉGORIE]',
+          location:    '[Ville]',
+          year:        '2024',
+          description: '[Description courte du chantier et des travaux réalisés.]',
+          before:      '/assets/images/placeholder-before.png',
+          after:       '/assets/images/placeholder-after.png',
+        },
+        {
+          title:       '[PROJET 2]',
+          category:    '[CATÉGORIE]',
+          location:    '[Ville]',
+          year:        '2024',
+          description: '[Description courte du chantier et des travaux réalisés.]',
+          before:      '/assets/images/placeholder-before.png',
+          after:       '/assets/images/placeholder-after.png',
+        },
+        {
+          title:       '[PROJET 3]',
+          category:    '[CATÉGORIE]',
+          location:    '[Ville]',
+          year:        '2023',
+          description: '[Description courte du chantier et des travaux réalisés.]',
+          before:      '/assets/images/placeholder-before.png',
+          after:       '/assets/images/placeholder-after.png',
+        },
       ]
     },
 
@@ -348,7 +398,7 @@ export const siteConfig = {
 // ─── Re-exports nommés (compat avec les composants existants) ──────────────
 export type Variant = 'A' | 'B' | 'C';
 
-export const { business, branding, seo, design, features, pages, nav } = siteConfig;
+export const { business, branding, seo, design, features, pages, nav, content } = siteConfig;
 export const variants  = siteConfig.design.variants;
 export const hero         = siteConfig.content.hero;
 export const services     = siteConfig.content.services;
@@ -357,9 +407,10 @@ export const testimonials = siteConfig.content.testimonials;
 export const pricing      = siteConfig.content.pricing;
 export const faq          = siteConfig.content.faq;
 export const cta          = siteConfig.content.cta;
-export const contact      = siteConfig.content.contact;
-export const footer       = siteConfig.content.footer;
-export const portfolio    = siteConfig.content.portfolio;
+export const contact         = siteConfig.content.contact;
+export const footer          = siteConfig.content.footer;
+export const portfolio       = siteConfig.content.portfolio;
+export const certifications  = siteConfig.content.certifications;
 
 // ─── Palettes de départ (copier-coller les valeurs dans branding) ──────────
 // Artisan   → primary #b8763d  primaryDark #9a6128  primarySoft #f6e7d4

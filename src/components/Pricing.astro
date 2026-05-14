@@ -1,14 +1,10 @@
 ---
-// Pricing — 2 variantes
-// A : 3 cards — centre mis en avant (highlight)
-// B : Comparatif tableau
-import { variants, pricing } from '../config/site';
-
-const v = variants.pricing;
+// Pricing — 8 variantes (une par direction visuelle)
+import { pricing } from '../config/site';
 ---
 
-{/* ── Variante A : 3 cards ────────────────────────────────────────────── */}
-<section class="section v-only-a v-only-c" id="tarifs-a">
+{/* ── A+C : 3 cards classiques ────────────────────────────────────────── */}
+<section class="section v-only-a v-only-c" id="tarifs">
   <div class="container">
     <div class="prc-head">
       <p class="eyebrow">{pricing.eyebrow}</p>
@@ -38,7 +34,7 @@ const v = variants.pricing;
               </li>
             ))}
           </ul>
-          <a href="#contact" class={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
+          <a href="/contact" class={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
              style="width: 100%; justify-content: center;">
             {plan.cta}
           </a>
@@ -48,8 +44,8 @@ const v = variants.pricing;
   </div>
 </section>
 
-{/* ── Variante B : tableau comparatif ───────────────────────────────── */}
-<section class="section section-alt v-only-b" id="tarifs-b">
+{/* ── B : tableau comparatif (Vercel / Linear) ──────────────────────── */}
+<section class="section section-alt v-only-b" id="tarifs">
   <div class="container">
     <div class="prc-head">
       <p class="eyebrow">{pricing.eyebrow}</p>
@@ -79,11 +75,192 @@ const v = variants.pricing;
             ))}
           </div>
           <div class="prc-b-action" role="cell">
-            <a href="#contact" class={`btn btn-sm ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}>
+            <a href="/contact" class={`btn btn-sm ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}>
               {plan.cta}
             </a>
           </div>
         </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── D : Forge — bandes brutales ───────────────────────────────────── */}
+<section class="section v-only-d prc-d-section" id="tarifs">
+  <div class="container">
+    <div class="prc-d-head">
+      <p class="prc-d-eyebrow">{pricing.eyebrow}</p>
+      <h2 class="prc-d-h2">{pricing.title}</h2>
+    </div>
+    <div class="prc-d-list">
+      {pricing.plans.map((plan, i) => (
+        <div class={`prc-d-item ${plan.highlight ? 'prc-d-item--hi' : ''}`}>
+          <div class="prc-d-num">0{i + 1}</div>
+          <div class="prc-d-info">
+            <h3 class="prc-d-name">{plan.name}</h3>
+            <p class="prc-d-desc">{plan.desc}</p>
+            <ul class="prc-d-features">
+              {plan.features.map((f) => <li class="prc-d-feat">— {f}</li>)}
+            </ul>
+          </div>
+          <div class="prc-d-right">
+            <div class="prc-d-price">
+              <span class="prc-d-amount">{plan.price}</span>
+              {plan.unit && <span class="prc-d-unit">{plan.unit}</span>}
+            </div>
+            <a href="/contact" class="btn btn-primary btn-sm">{plan.cta}</a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── E : Le Salon — cartes éditoriales ─────────────────────────────── */}
+<section class="section v-only-e prc-e-section" id="tarifs">
+  <div class="container">
+    <div class="prc-e-head">
+      <p class="prc-e-eyebrow">{pricing.eyebrow}</p>
+      <h2 class="prc-e-h2">{pricing.title}</h2>
+      <p class="prc-e-sub">{pricing.subtitle}</p>
+    </div>
+    <div class="prc-e-grid">
+      {pricing.plans.map((plan) => (
+        <article class={`prc-e-card ${plan.highlight ? 'prc-e-card--hi' : ''}`}>
+          {plan.highlight && <div class="prc-e-label">Recommandé</div>}
+          <h3 class="prc-e-name">{plan.name}</h3>
+          <div class="prc-e-price">
+            <span class="prc-e-amount">{plan.price}</span>
+            {plan.unit && <span class="prc-e-unit">{plan.unit}</span>}
+          </div>
+          <p class="prc-e-desc">{plan.desc}</p>
+          <div class="prc-e-divider"></div>
+          <ul class="prc-e-features">
+            {plan.features.map((f) => (
+              <li class="prc-e-feat">
+                <span class="prc-e-check">✓</span> {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
+             style="width: 100%; justify-content: center; margin-top: auto;">
+            {plan.cta}
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── F : Stade — grille tech ───────────────────────────────────────── */}
+<section class="section section-alt v-only-f prc-f-section" id="tarifs">
+  <div class="container">
+    <div class="prc-head" style="margin-bottom: 48px;">
+      <p class="eyebrow">{pricing.eyebrow}</p>
+      <h2 class="prc-h2">{pricing.title}</h2>
+      <p class="prc-sub">{pricing.subtitle}</p>
+    </div>
+    <div class="prc-f-grid">
+      {pricing.plans.map((plan) => (
+        <article class={`prc-f-card ${plan.highlight ? 'prc-f-card--hi' : ''}`}>
+          <div class="prc-f-top">
+            {plan.highlight && <span class="prc-f-tag">Popular</span>}
+            <h3 class="prc-f-name">{plan.name}</h3>
+            <p class="prc-f-desc">{plan.desc}</p>
+          </div>
+          <div class="prc-f-price">
+            <span class="prc-f-amount">{plan.price}</span>
+            {plan.unit && <span class="prc-f-unit">{plan.unit}</span>}
+          </div>
+          <a href="/contact" class={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
+             style="width: 100%; justify-content: center;">
+            {plan.cta}
+          </a>
+          <ul class="prc-f-features">
+            {plan.features.map((f) => (
+              <li class="prc-f-feat">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a0e1a"
+                     stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── G : Verveine — cards rondes wellness ─────────────────────────── */}
+<section class="section v-only-g prc-g-section" id="tarifs">
+  <div class="container">
+    <div class="prc-head" style="margin-bottom: 56px;">
+      <p class="eyebrow">{pricing.eyebrow}</p>
+      <h2 class="prc-h2">{pricing.title}</h2>
+      <p class="prc-sub">{pricing.subtitle}</p>
+    </div>
+    <div class="prc-g-grid">
+      {pricing.plans.map((plan) => (
+        <article class={`prc-g-card ${plan.highlight ? 'prc-g-card--hi' : ''}`}>
+          {plan.highlight && <div class="prc-g-badge">✦ Idéal</div>}
+          <h3 class="prc-g-name">{plan.name}</h3>
+          <div class="prc-g-price">
+            <span class="prc-g-amount">{plan.price}</span>
+            {plan.unit && <span class="prc-g-unit">{plan.unit}</span>}
+          </div>
+          <p class="prc-g-desc">{plan.desc}</p>
+          <ul class="prc-g-features">
+            {plan.features.map((f) => (
+              <li class="prc-g-feat">
+                <span class="prc-g-dot">●</span> {f}
+              </li>
+            ))}
+          </ul>
+          <a href="/contact" class={`btn ${plan.highlight ? 'btn-primary' : 'btn-outline'}`}
+             style="width: 100%; justify-content: center; border-radius: 9999px;">
+            {plan.cta}
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── H : ABPM — cards bleu clean ──────────────────────────────────── */}
+<section class="section section-alt v-only-h prc-h-section" id="tarifs">
+  <div class="container">
+    <div class="prc-h-head">
+      <p class="prc-h-eyebrow">{pricing.eyebrow}</p>
+      <h2 class="prc-h-h2">{pricing.title}</h2>
+      <p class="prc-h-sub">{pricing.subtitle}</p>
+    </div>
+    <div class="prc-h-grid">
+      {pricing.plans.map((plan) => (
+        <article class={`prc-h-card ${plan.highlight ? 'prc-h-card--hi' : ''}`}>
+          {plan.highlight && <div class="prc-h-popular">Plus populaire</div>}
+          <h3 class="prc-h-name">{plan.name}</h3>
+          <div class="prc-h-price">
+            <span class="prc-h-amount">{plan.price}</span>
+            {plan.unit && <span class="prc-h-unit">{plan.unit}</span>}
+          </div>
+          <p class="prc-h-desc">{plan.desc}</p>
+          <a href="/contact" class={`prc-h-cta ${plan.highlight ? 'prc-h-cta--hi' : ''}`}>
+            {plan.cta}
+          </a>
+          <ul class="prc-h-features">
+            {plan.features.map((f) => (
+              <li class="prc-h-feat">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" fill="#0ea5e9" opacity="0.15"/>
+                  <path d="M8 12l3 3 5-5" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </article>
       ))}
     </div>
   </div>
@@ -97,15 +274,14 @@ const v = variants.pricing;
 .prc-head { text-align: center; margin-bottom: 56px; }
 .prc-sub { font-size: 16px; color: var(--inkSoft); line-height: 1.6; max-width: 54ch; margin: 0 auto; }
 
-/* ─── A ───────────────────────────────────────────────────────────────── */
+/* ─── A / C ───────────────────────────────────────────────────────────── */
 .prc-a-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start;
 }
 .prc-a-card {
   background: var(--bgCard); border: 1px solid var(--lineSoft);
   border-radius: var(--radius-lg); padding: 28px 24px;
-  display: flex; flex-direction: column; gap: 24px;
-  position: relative;
+  display: flex; flex-direction: column; gap: 24px; position: relative;
 }
 .prc-a-card--hi {
   border-color: var(--ink);
@@ -142,8 +318,7 @@ const v = variants.pricing;
 .prc-b-row {
   display: grid; grid-template-columns: 2fr 1fr 2fr 1fr;
   padding: 24px; gap: 16px; align-items: center;
-  border-bottom: 1px solid var(--lineSoft);
-  background: var(--bgCard);
+  border-bottom: 1px solid var(--lineSoft); background: var(--bgCard);
   transition: background 0.15s;
 }
 .prc-b-row:last-child { border-bottom: none; }
@@ -160,11 +335,164 @@ const v = variants.pricing;
 .prc-b-feature::before { content: '· '; color: var(--primary); }
 .prc-b-action { display: flex; justify-content: flex-end; }
 
+/* ─── D : Forge ───────────────────────────────────────────────────────── */
+.prc-d-section { background: #f3e8d0; }
+.prc-d-head { margin-bottom: 48px; }
+.prc-d-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7a6a4e; }
+.prc-d-h2 { font-family: 'Manrope', sans-serif; font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: #241c12; margin: 8px 0 0; letter-spacing: -0.02em; }
+.prc-d-list { display: flex; flex-direction: column; }
+.prc-d-item {
+  display: grid; grid-template-columns: 48px 1fr auto;
+  gap: 32px; align-items: start;
+  padding: 32px 0; border-top: 1.5px solid #241c12;
+}
+.prc-d-item:last-child { border-bottom: 1.5px solid #241c12; }
+.prc-d-item--hi { background: #ecdcbe; margin: 0 -24px; padding: 32px 24px; }
+.prc-d-num { font-family: 'Manrope', monospace; font-size: 28px; font-weight: 800; color: #b8a47a; line-height: 1; padding-top: 4px; }
+.prc-d-name { font-family: 'Manrope', sans-serif; font-size: 20px; font-weight: 700; color: #241c12; margin-bottom: 6px; }
+.prc-d-desc { font-size: 14px; color: #4a3d2a; margin-bottom: 16px; }
+.prc-d-features { display: flex; flex-direction: column; gap: 4px; }
+.prc-d-feat { font-family: 'Manrope', sans-serif; font-size: 13.5px; color: #4a3d2a; }
+.prc-d-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; flex-shrink: 0; }
+.prc-d-price { display: flex; align-items: baseline; gap: 6px; }
+.prc-d-amount { font-size: 32px; font-weight: 800; color: #241c12; letter-spacing: -0.03em; }
+.prc-d-unit { font-size: 13px; color: #4a3d2a; }
+
+/* ─── E : Le Salon ────────────────────────────────────────────────────── */
+.prc-e-section { background: #f4ede0; }
+.prc-e-head { text-align: center; margin-bottom: 56px; }
+.prc-e-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8074; }
+.prc-e-h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(28px, 4vw, 48px); font-style: italic; color: #1a1612; margin: 10px 0 16px; }
+.prc-e-sub { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; color: #5a504a; max-width: 50ch; margin: 0 auto; }
+.prc-e-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+.prc-e-card {
+  background: #fbf6ec; border: 1px solid #d4c8b8;
+  padding: 32px 28px; display: flex; flex-direction: column; gap: 20px; position: relative;
+}
+.prc-e-card--hi { border-color: #2c2520; border-width: 2px; }
+.prc-e-label {
+  position: absolute; top: -11px; left: 24px;
+  background: #2c2520; color: #fbf6ec;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px;
+}
+.prc-e-name { font-family: 'Newsreader', Georgia, serif; font-size: 18px; font-style: italic; color: #1a1612; }
+.prc-e-price { display: flex; align-items: baseline; gap: 6px; }
+.prc-e-amount { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; font-weight: 700; color: #1a1612; letter-spacing: -0.03em; }
+.prc-e-unit { font-size: 13px; color: #8a8074; }
+.prc-e-desc { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; color: #5a504a; line-height: 1.6; }
+.prc-e-divider { height: 1px; background: #d4c8b8; }
+.prc-e-features { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.prc-e-feat { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; color: #5a504a; display: flex; gap: 8px; }
+.prc-e-check { color: #2c2520; font-weight: 700; flex-shrink: 0; }
+
+/* ─── F : Stade ────────────────────────────────────────────────────────── */
+.prc-f-section {}
+.prc-f-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.prc-f-card {
+  background: #ffffff; border: 1px solid #e3e7ee; border-radius: 12px;
+  padding: 28px 24px; display: flex; flex-direction: column; gap: 20px;
+}
+.prc-f-card--hi {
+  border-color: #0a0e1a;
+  box-shadow: 0 0 0 1px #0a0e1a;
+}
+.prc-f-top { display: flex; flex-direction: column; gap: 6px; }
+.prc-f-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  background: #0a0e1a; color: #fff;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+  width: fit-content;
+}
+.prc-f-name { font-size: 15px; font-weight: 600; color: #0a0e1a; }
+.prc-f-desc { font-size: 13px; color: #7a8195; line-height: 1.5; }
+.prc-f-price { display: flex; align-items: baseline; gap: 4px; }
+.prc-f-amount { font-size: 32px; font-weight: 700; color: #0a0e1a; letter-spacing: -0.03em; }
+.prc-f-unit { font-size: 13px; color: #7a8195; }
+.prc-f-features { display: flex; flex-direction: column; gap: 8px; padding-top: 4px; border-top: 1px solid #eef1f5; }
+.prc-f-feat {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: #3d4458; line-height: 1.45;
+}
+.prc-f-feat svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ─── G : Verveine ────────────────────────────────────────────────────── */
+.prc-g-section { background: #f4f1e8; }
+.prc-g-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+.prc-g-card {
+  background: #fbf8f0; border: 1px solid #d8d2c2; border-radius: 28px;
+  padding: 32px 28px; display: flex; flex-direction: column; gap: 20px; position: relative;
+}
+.prc-g-card--hi { border-color: #3e4a3a; border-width: 2px; background: #eeeadd; }
+.prc-g-badge {
+  display: inline-block; padding: 4px 14px; border-radius: 9999px;
+  background: #3e4a3a; color: #fbf8f0;
+  font-size: 11px; font-weight: 500; width: fit-content;
+}
+.prc-g-name { font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 600; color: #1f2a1c; }
+.prc-g-price { display: flex; align-items: baseline; gap: 6px; }
+.prc-g-amount { font-size: 36px; font-weight: 700; color: #1f2a1c; letter-spacing: -0.03em; }
+.prc-g-unit { font-size: 13px; color: #888a78; }
+.prc-g-desc { font-size: 14px; color: #5a5f50; line-height: 1.6; }
+.prc-g-features { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.prc-g-feat { font-size: 13.5px; color: #5a5f50; display: flex; gap: 8px; align-items: flex-start; }
+.prc-g-dot { color: #3e4a3a; font-size: 8px; flex-shrink: 0; margin-top: 5px; }
+
+/* ─── H : ABPM ────────────────────────────────────────────────────────── */
+.prc-h-section {}
+.prc-h-head { text-align: center; margin-bottom: 56px; }
+.prc-h-eyebrow {
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase; color: #0ea5e9;
+}
+.prc-h-h2 { font-family: 'Outfit', sans-serif; font-size: clamp(28px, 4vw, 42px); font-weight: 700; color: #0f172a; margin: 10px 0 16px; }
+.prc-h-sub { font-family: 'Outfit', sans-serif; font-size: 16px; color: #64748b; max-width: 52ch; margin: 0 auto; }
+.prc-h-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.prc-h-card {
+  background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 32px 28px; display: flex; flex-direction: column; gap: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.prc-h-card--hi {
+  border-color: #0ea5e9; border-width: 2px;
+  box-shadow: 0 0 0 1px #0ea5e9, 0 8px 24px rgba(14,165,233,.12);
+}
+.prc-h-popular {
+  display: inline-block; padding: 3px 12px; border-radius: 9999px;
+  background: #e0f2fe; color: #0ea5e9;
+  font-family: 'Outfit', sans-serif; font-size: 11px; font-weight: 600;
+  width: fit-content;
+}
+.prc-h-name { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 600; color: #0f172a; }
+.prc-h-price { display: flex; align-items: baseline; gap: 4px; }
+.prc-h-amount { font-family: 'Outfit', sans-serif; font-size: 36px; font-weight: 700; color: #0f172a; letter-spacing: -0.03em; }
+.prc-h-unit { font-size: 13px; color: #94a3b8; }
+.prc-h-desc { font-family: 'Outfit', sans-serif; font-size: 14px; color: #64748b; line-height: 1.6; }
+.prc-h-cta {
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px 24px; border-radius: 9999px; border: 1.5px solid #e2e8f0;
+  font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; color: #0f172a;
+  text-decoration: none; transition: all 0.2s;
+}
+.prc-h-cta:hover { border-color: #0ea5e9; color: #0ea5e9; }
+.prc-h-cta--hi { background: #0ea5e9; border-color: #0ea5e9; color: #fff; }
+.prc-h-cta--hi:hover { background: #0284c7; border-color: #0284c7; color: #fff; }
+.prc-h-features { display: flex; flex-direction: column; gap: 10px; }
+.prc-h-feat {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: 'Outfit', sans-serif; font-size: 14px; color: #64748b; line-height: 1.4;
+}
+.prc-h-feat svg { flex-shrink: 0; margin-top: 1px; }
+
 /* ─── Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .prc-a-grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+  .prc-a-grid, .prc-e-grid, .prc-f-grid, .prc-g-grid, .prc-h-grid {
+    grid-template-columns: 1fr; max-width: 440px; margin: 0 auto;
+  }
   .prc-b-header { display: none; }
   .prc-b-row { grid-template-columns: 1fr; gap: 12px; }
   .prc-b-action { justify-content: flex-start; }
+  .prc-d-item { grid-template-columns: 40px 1fr; }
+  .prc-d-right { flex-direction: row; justify-content: space-between; grid-column: 1 / -1; }
 }
 </style>

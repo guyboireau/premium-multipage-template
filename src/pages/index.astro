@@ -5,29 +5,66 @@ import Hero from '../components/Hero.astro';
 import Services from '../components/Services.astro';
 import About from '../components/About.astro';
 import Testimonials from '../components/Testimonials.astro';
+import Certifications from '../components/Certifications.astro';
+import Pricing from '../components/Pricing.astro';
 import FAQ from '../components/FAQ.astro';
 import CTA from '../components/CTA.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+import UrgentFloat from '../components/UrgentFloat.astro';
 
 import { business, seo, features } from '../config/site';
 
-// Schema.org LocalBusiness (handled in Layout, but we could add more specific ones here)
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  description: seo.defaultDescription,
+  telephone: business.phone,
+  email: business.email,
+  url: seo.siteUrl,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress:   business.address.street,
+    addressLocality: business.address.city,
+    postalCode:      business.address.postalCode,
+    addressCountry:  business.address.country,
+  },
+  areaServed: business.serviceArea.map(area => ({ '@type': 'City', name: area })),
+  openingHoursSpecification: Object.entries(business.openingHours)
+    .filter(([, hours]) => hours !== null)
+    .map(([day, hours]) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: `https://schema.org/${day.charAt(0).toUpperCase()}${day.slice(1)}`,
+      opens:  (hours as string).split('-')[0],
+      closes: (hours as string).split('-')[1],
+    })),
+  hasCredential: business.certifications.map(c => ({
+    '@type': 'EducationalOccupationalCredential',
+    name: c.label,
+    description: c.sublabel,
+  })),
+};
 ---
 
 <Layout
   title={`${business.name} — ${business.tagline}`}
   description={seo.defaultDescription}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
   <Header />
   <main id="main-content">
     <Hero />
     <Services />
     <About />
+    <Certifications />
     {features.testimonials && <Testimonials />}
+    {features.pricing && <Pricing />}
     <FAQ />
     <CTA />
     <Contact />
   </main>
   <Footer />
+  <UrgentFloat />
 </Layout>

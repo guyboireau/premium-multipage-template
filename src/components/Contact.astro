@@ -47,6 +47,18 @@ import { contact, business } from '../config/site';
 
     <div class="cnt-form-wrap">
       <form class="cnt-form" id="contact-form" novalidate>
+        {/* Type de demande */}
+        <div class="cnt-field">
+          <label for="cnt-type" class="cnt-label">Type de demande *</label>
+          <select id="cnt-type" name="type" class="cnt-input cnt-select" required>
+            <option value="">Sélectionnez…</option>
+            {contact.formTypes.map((t) => (
+              <option value={t}>{t}</option>
+            ))}
+          </select>
+          <span class="cnt-error" aria-live="polite"></span>
+        </div>
+
         <div class="cnt-row cnt-row-2">
           <div class="cnt-field">
             <label for="cnt-nom" class="cnt-label">Nom *</label>
@@ -55,27 +67,36 @@ import { contact, business } from '../config/site';
             <span class="cnt-error" aria-live="polite"></span>
           </div>
           <div class="cnt-field">
-            <label for="cnt-email" class="cnt-label">Email *</label>
-            <input type="email" id="cnt-email" name="email" class="cnt-input"
-                   placeholder="sophie@exemple.fr" required autocomplete="email" />
+            <label for="cnt-phone" class="cnt-label">Téléphone *</label>
+            <input type="tel" id="cnt-phone" name="telephone" class="cnt-input"
+                   placeholder="06 00 00 00 00" required autocomplete="tel" />
             <span class="cnt-error" aria-live="polite"></span>
           </div>
         </div>
-        <div class="cnt-field">
-          <label for="cnt-sujet" class="cnt-label">Sujet</label>
-          <input type="text" id="cnt-sujet" name="sujet" class="cnt-input"
-                 placeholder="Création d'entreprise, contrat…" />
+
+        <div class="cnt-row cnt-row-2">
+          <div class="cnt-field">
+            <label for="cnt-email" class="cnt-label">Email</label>
+            <input type="email" id="cnt-email" name="email" class="cnt-input"
+                   placeholder="sophie@exemple.fr" autocomplete="email" />
+          </div>
+          <div class="cnt-field">
+            <label for="cnt-ville" class="cnt-label">Ville d'intervention</label>
+            <input type="text" id="cnt-ville" name="ville" class="cnt-input"
+                   placeholder="Paris, Lyon…" autocomplete="address-level2" />
+          </div>
         </div>
+
         <div class="cnt-field">
-          <label for="cnt-message" class="cnt-label">Message *</label>
+          <label for="cnt-message" class="cnt-label">Description des travaux *</label>
           <textarea id="cnt-message" name="message" class="cnt-input cnt-textarea"
-                    placeholder="Décrivez votre situation en quelques lignes…"
+                    placeholder="Décrivez vos travaux : surface, type d'intervention, urgence…"
                     rows="5" required></textarea>
           <span class="cnt-error" aria-live="polite"></span>
         </div>
         <div class="cnt-footer">
           <button type="submit" class="btn btn-primary btn-lg cnt-submit">
-            Envoyer le message
+            Envoyer la demande
           </button>
           <p class="cnt-privacy eyebrow">Vos données ne sont jamais revendues.</p>
         </div>
@@ -192,6 +213,7 @@ form?.addEventListener('submit', async (e) => {
 .cnt-input:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(26,25,22,.06); }
 .cnt-input[data-invalid="true"] { border-color: #e05252; }
 .cnt-textarea { resize: vertical; min-height: 120px; line-height: 1.55; }
+.cnt-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a574e' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 40px; cursor: pointer; }
 .cnt-error { font-size: 12px; color: #e05252; min-height: 16px; }
 
 .cnt-footer { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }

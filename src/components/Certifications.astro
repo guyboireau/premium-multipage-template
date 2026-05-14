@@ -1,0 +1,83 @@
+---
+import { business, certifications } from '../config/site';
+---
+
+<section class="section section-alt certif-section" id="certifications">
+  <div class="container">
+    <div class="certif-head">
+      <p class="eyebrow">{certifications.eyebrow}</p>
+      <h2 class="certif-h2">{certifications.title}</h2>
+      <p class="certif-sub">{certifications.subtitle}</p>
+    </div>
+
+    <div class="certif-grid">
+      {business.certifications.map((cert) => (
+        <div class="certif-card">
+          <span class="certif-icon" aria-hidden="true">{cert.icon}</span>
+          <h3 class="certif-label">{cert.label}</h3>
+          <p class="certif-sublabel">{cert.sublabel}</p>
+        </div>
+      ))}
+
+      {/* Zone d'intervention */}
+      <div class="certif-card certif-area">
+        <span class="certif-icon" aria-hidden="true">📍</span>
+        <h3 class="certif-label">Zone d'intervention</h3>
+        <p class="certif-sublabel">{business.serviceArea.join(' · ')}</p>
+      </div>
+
+      {/* Assurance */}
+      <div class="certif-card">
+        <span class="certif-icon" aria-hidden="true">📋</span>
+        <h3 class="certif-label">Assurance RC Pro</h3>
+        <p class="certif-sublabel">{business.assurance.name}</p>
+      </div>
+
+      {/* SIRET */}
+      <div class="certif-card">
+        <span class="certif-icon" aria-hidden="true">🏢</span>
+        <h3 class="certif-label">SIRET</h3>
+        <p class="certif-sublabel">{business.siret}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.certif-section {}
+.certif-head { text-align: center; margin-bottom: 52px; }
+.certif-h2 {
+  font-size: clamp(24px, 3vw, 36px); font-weight: 600;
+  letter-spacing: -0.02em; color: var(--ink); margin: 12px 0 14px;
+}
+.certif-sub { font-size: 15px; color: var(--inkSoft); max-width: 52ch; margin: 0 auto; line-height: 1.6; }
+
+.certif-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+.certif-card {
+  background: var(--bgCard);
+  border: 1px solid var(--lineSoft);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.18s, transform 0.18s;
+}
+.certif-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.certif-icon { font-size: 28px; line-height: 1; }
+.certif-label { font-size: 15px; font-weight: 600; color: var(--ink); margin: 0; }
+.certif-sublabel { font-size: 13px; color: var(--inkSoft); margin: 0; line-height: 1.45; }
+
+.certif-area .certif-sublabel { font-size: 12.5px; }
+
+@media (max-width: 600px) {
+  .certif-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>

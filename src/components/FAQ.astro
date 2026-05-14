@@ -1,83 +1,191 @@
 ---
-// FAQ — 2 variantes
-// A : Accordéon classique pleine largeur
-// B : 2 colonnes Q&R
-import { variants, faq } from '../config/site';
-
-const v = variants.faq;
+// FAQ — 8 variantes (une par direction visuelle, via CSS v-only-*)
+import { faq } from '../config/site';
 ---
 
-{/* ── Variante A : accordéon ──────────────────────────────────────────── */}
-{v === 'A' && (
-  <section class="section section-alt" id="faq">
-    <div class="container faq-a-inner">
-      <div class="faq-a-head">
-        <p class="eyebrow">{faq.eyebrow}</p>
-        <h2 class="faq-h2">{faq.title}</h2>
-      </div>
-      <div class="faq-a-list" role="list">
-        {faq.items.map((item, i) => (
-          <div class="faq-item" role="listitem">
-            <button
-              class="faq-trigger"
-              aria-expanded="false"
-              aria-controls={`faq-panel-${i}`}
-              id={`faq-btn-${i}`}
-            >
-              <span class="faq-q">{item.q}</span>
-              <span class="faq-icon" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-            </button>
-            <div
-              class="faq-panel"
-              role="region"
-              id={`faq-panel-${i}`}
-              aria-labelledby={`faq-btn-${i}`}
-              hidden
-            >
-              <p class="faq-a-answer">{item.a}</p>
-            </div>
+{/* ── A+C : accordéon classique ───────────────────────────────────────── */}
+<section class="section section-alt v-only-a v-only-c" id="faq">
+  <div class="container faq-a-inner">
+    <div class="faq-a-head">
+      <p class="eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-h2">{faq.title}</h2>
+    </div>
+    <div class="faq-a-list" role="list">
+      {faq.items.map((item, i) => (
+        <div class="faq-item faq-item-a" role="listitem">
+          <button class="faq-trigger" aria-expanded="false"
+            aria-controls={`faq-a-panel-${i}`} id={`faq-a-btn-${i}`}>
+            <span class="faq-q">{item.q}</span>
+            <span class="faq-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-panel" role="region"
+            id={`faq-a-panel-${i}`} aria-labelledby={`faq-a-btn-${i}`} hidden>
+            <p class="faq-a-answer">{item.a}</p>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
-  </section>
-)}
+  </div>
+</section>
 
-{/* ── Variante B : 2 colonnes ─────────────────────────────────────────── */}
-{v === 'B' && (
-  <section class="section" id="faq">
-    <div class="container">
-      <div class="faq-b-head">
-        <p class="eyebrow">{faq.eyebrow}</p>
-        <h2 class="faq-h2">{faq.title}</h2>
-      </div>
-      <div class="faq-b-grid">
-        {faq.items.map((item) => (
-          <article class="faq-b-item">
-            <h3 class="faq-b-q">{item.q}</h3>
-            <p class="faq-b-a">{item.a}</p>
-          </article>
-        ))}
-      </div>
+{/* ── B : 2 colonnes cards ─────────────────────────────────────────────── */}
+<section class="section v-only-b" id="faq">
+  <div class="container">
+    <div class="faq-b-head">
+      <p class="eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-h2">{faq.title}</h2>
     </div>
-  </section>
-)}
+    <div class="faq-b-grid">
+      {faq.items.map((item) => (
+        <article class="faq-b-item">
+          <h3 class="faq-b-q">{item.q}</h3>
+          <p class="faq-b-a">{item.a}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── D : Forge — liste numérotée brutal ──────────────────────────────── */}
+<section class="section v-only-d faq-d-section" id="faq">
+  <div class="container">
+    <div class="faq-d-head">
+      <p class="faq-d-eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-d-h2">{faq.title}</h2>
+    </div>
+    <div class="faq-d-list">
+      {faq.items.map((item, i) => (
+        <div class="faq-d-item">
+          <span class="faq-d-num">0{i + 1}</span>
+          <div class="faq-d-content">
+            <h3 class="faq-d-q">{item.q}</h3>
+            <p class="faq-d-a">{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── E : Le Salon — accordéon éditorial ──────────────────────────────── */}
+<section class="section v-only-e faq-e-section" id="faq">
+  <div class="container">
+    <div class="faq-e-head">
+      <p class="faq-e-eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-e-h2">{faq.title}</h2>
+    </div>
+    <div class="faq-e-list" role="list">
+      {faq.items.map((item, i) => (
+        <div class="faq-item faq-item-e" role="listitem">
+          <button class="faq-e-trigger" aria-expanded="false"
+            aria-controls={`faq-e-panel-${i}`} id={`faq-e-btn-${i}`}>
+            <span class="faq-e-q">{item.q}</span>
+            <span class="faq-e-icon" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-panel" role="region"
+            id={`faq-e-panel-${i}`} aria-labelledby={`faq-e-btn-${i}`} hidden>
+            <p class="faq-e-a">{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── F : Stade — grille Q&R compacte ────────────────────────────────── */}
+<section class="section section-alt v-only-f faq-f-section" id="faq">
+  <div class="container">
+    <div class="prc-head" style="margin-bottom: 48px;">
+      <p class="eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-h2">{faq.title}</h2>
+    </div>
+    <div class="faq-f-grid">
+      {faq.items.map((item) => (
+        <article class="faq-f-item">
+          <h3 class="faq-f-q">{item.q}</h3>
+          <p class="faq-f-a">{item.a}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── G : Verveine — accordéon doux arrondi ───────────────────────────── */}
+<section class="section v-only-g faq-g-section" id="faq">
+  <div class="container">
+    <div class="faq-g-head">
+      <p class="eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-h2">{faq.title}</h2>
+    </div>
+    <div class="faq-g-list" role="list">
+      {faq.items.map((item, i) => (
+        <div class="faq-item faq-item-g" role="listitem">
+          <button class="faq-g-trigger" aria-expanded="false"
+            aria-controls={`faq-g-panel-${i}`} id={`faq-g-btn-${i}`}>
+            <span class="faq-g-q">{item.q}</span>
+            <span class="faq-g-icon" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-panel" role="region"
+            id={`faq-g-panel-${i}`} aria-labelledby={`faq-g-btn-${i}`} hidden>
+            <p class="faq-g-a">{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+{/* ── H : ABPM — accordéon blue clean ─────────────────────────────────── */}
+<section class="section section-alt v-only-h faq-h-section" id="faq">
+  <div class="container">
+    <div class="faq-h-head">
+      <p class="faq-h-eyebrow">{faq.eyebrow}</p>
+      <h2 class="faq-h-h2">{faq.title}</h2>
+    </div>
+    <div class="faq-h-list" role="list">
+      {faq.items.map((item, i) => (
+        <div class="faq-item faq-item-h" role="listitem">
+          <button class="faq-h-trigger" aria-expanded="false"
+            aria-controls={`faq-h-panel-${i}`} id={`faq-h-btn-${i}`}>
+            <span class="faq-h-q">{item.q}</span>
+            <span class="faq-h-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-panel" role="region"
+            id={`faq-h-panel-${i}`} aria-labelledby={`faq-h-btn-${i}`} hidden>
+            <p class="faq-h-a">{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
 
 <script>
-// Accordéon accessible (variante A)
-document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach(btn => {
+// Accordéon accessible — gère toutes les variantes via .faq-trigger, .faq-e-trigger, etc.
+document.querySelectorAll<HTMLButtonElement>('.faq-trigger, .faq-e-trigger, .faq-g-trigger, .faq-h-trigger').forEach(btn => {
   btn.addEventListener('click', () => {
     const expanded = btn.getAttribute('aria-expanded') === 'true';
     const panelId = btn.getAttribute('aria-controls');
     const panel = panelId ? document.getElementById(panelId) : null;
 
-    // Ferme tous les autres
-    document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach(b => {
+    // Ferme les autres dans le même groupe (même section parente)
+    const section = btn.closest('section');
+    section?.querySelectorAll<HTMLButtonElement>('.faq-trigger, .faq-e-trigger, .faq-g-trigger, .faq-h-trigger').forEach(b => {
       const pid = b.getAttribute('aria-controls');
       const p = pid ? document.getElementById(pid) : null;
       b.setAttribute('aria-expanded', 'false');
@@ -100,12 +208,13 @@ document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach(btn => {
   letter-spacing: -0.025em; line-height: 1.1; color: var(--ink); margin: 12px 0 0;
 }
 
-/* ─── A ───────────────────────────────────────────────────────────────── */
+/* ─── A / C ───────────────────────────────────────────────────────────── */
 .faq-a-inner { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(40px, 8vw, 96px); align-items: start; }
 .faq-a-head { position: sticky; top: 100px; }
 .faq-a-list { display: flex; flex-direction: column; }
-.faq-item { border-top: 1px solid var(--lineSoft); }
-.faq-item:last-child { border-bottom: 1px solid var(--lineSoft); }
+.faq-item { }
+.faq-item-a { border-top: 1px solid var(--lineSoft); }
+.faq-item-a:last-child { border-bottom: 1px solid var(--lineSoft); }
 .faq-trigger {
   width: 100%; display: flex; align-items: center; justify-content: space-between;
   gap: 16px; padding: 20px 0;
@@ -128,10 +237,91 @@ document.querySelectorAll<HTMLButtonElement>('.faq-trigger').forEach(btn => {
 .faq-b-q { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px; line-height: 1.4; }
 .faq-b-a { font-size: 14px; color: var(--inkSoft); line-height: 1.65; margin: 0; }
 
+/* ─── D : Forge ───────────────────────────────────────────────────────── */
+.faq-d-section { background: #f3e8d0; }
+.faq-d-head { margin-bottom: 48px; }
+.faq-d-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7a6a4e; }
+.faq-d-h2 { font-family: 'Manrope', sans-serif; font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: #241c12; margin: 8px 0 0; }
+.faq-d-list { display: flex; flex-direction: column; }
+.faq-d-item {
+  display: grid; grid-template-columns: 48px 1fr; gap: 24px; align-items: start;
+  padding: 28px 0; border-top: 1.5px solid #241c12;
+}
+.faq-d-item:last-child { border-bottom: 1.5px solid #241c12; }
+.faq-d-num { font-family: 'Manrope', sans-serif; font-size: 24px; font-weight: 800; color: #b8a47a; line-height: 1; padding-top: 2px; }
+.faq-d-q { font-family: 'Manrope', sans-serif; font-size: 18px; font-weight: 700; color: #241c12; margin-bottom: 10px; }
+.faq-d-a { font-size: 14px; color: #4a3d2a; line-height: 1.7; margin: 0; }
+
+/* ─── E : Le Salon ────────────────────────────────────────────────────── */
+.faq-e-section { background: #f4ede0; }
+.faq-e-head { text-align: center; margin-bottom: 56px; }
+.faq-e-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8074; }
+.faq-e-h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(28px, 4vw, 48px); font-style: italic; color: #1a1612; margin: 10px 0 0; }
+.faq-e-list { display: flex; flex-direction: column; max-width: 800px; margin: 0 auto; }
+.faq-item-e { border-top: 1px solid #d4c8b8; }
+.faq-item-e:last-child { border-bottom: 1px solid #d4c8b8; }
+.faq-e-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; padding: 22px 0;
+  background: none; border: none; cursor: pointer; text-align: left;
+}
+.faq-e-q { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 500; color: #1a1612; line-height: 1.4; }
+.faq-e-icon { font-size: 22px; font-weight: 300; color: #8a8074; line-height: 1; flex-shrink: 0; transition: transform 0.2s; }
+.faq-item.open .faq-e-icon { transform: rotate(45deg); }
+.faq-e-a { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: #5a504a; line-height: 1.75; margin: 0; padding-bottom: 22px; }
+
+/* ─── F : Stade ────────────────────────────────────────────────────────── */
+.faq-f-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.faq-f-item {
+  padding: 24px; background: #fff; border: 1px solid #e3e7ee; border-radius: 12px;
+}
+.faq-f-q { font-size: 15px; font-weight: 600; color: #0a0e1a; margin-bottom: 10px; line-height: 1.4; }
+.faq-f-a { font-size: 13.5px; color: #3d4458; line-height: 1.65; margin: 0; }
+
+/* ─── G : Verveine ────────────────────────────────────────────────────── */
+.faq-g-section { background: #f4f1e8; }
+.faq-g-head { text-align: center; margin-bottom: 48px; }
+.faq-g-list { display: flex; flex-direction: column; gap: 12px; max-width: 720px; margin: 0 auto; }
+.faq-item-g {
+  background: #fbf8f0; border: 1px solid #d8d2c2; border-radius: 20px; overflow: hidden;
+}
+.faq-g-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 20px 24px;
+  background: none; border: none; cursor: pointer; text-align: left;
+}
+.faq-g-q { font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; color: #1f2a1c; line-height: 1.4; }
+.faq-g-icon { flex-shrink: 0; color: #888a78; transition: transform 0.2s; }
+.faq-item.open .faq-g-icon { transform: rotate(180deg); }
+.faq-item-g .faq-panel { padding: 0 24px 20px; }
+.faq-g-a { font-family: 'DM Sans', sans-serif; font-size: 14.5px; color: #5a5f50; line-height: 1.7; margin: 0; }
+
+/* ─── H : ABPM ────────────────────────────────────────────────────────── */
+.faq-h-head { text-align: center; margin-bottom: 56px; }
+.faq-h-eyebrow {
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase; color: #0ea5e9;
+}
+.faq-h-h2 { font-family: 'Outfit', sans-serif; font-size: clamp(28px, 4vw, 42px); font-weight: 700; color: #0f172a; margin: 10px 0 0; }
+.faq-h-list { display: flex; flex-direction: column; max-width: 760px; margin: 0 auto; }
+.faq-item-h { border-top: 1px solid #e2e8f0; }
+.faq-item-h:last-child { border-bottom: 1px solid #e2e8f0; }
+.faq-h-trigger {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 22px 0;
+  background: none; border: none; cursor: pointer; text-align: left;
+}
+.faq-h-q { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 500; color: #0f172a; line-height: 1.4; }
+.faq-h-icon { flex-shrink: 0; color: #94a3b8; transition: transform 0.2s; }
+.faq-item.open .faq-h-icon { transform: rotate(180deg); color: #0ea5e9; }
+.faq-item.open .faq-h-q { color: #0ea5e9; }
+.faq-item-h .faq-panel { padding-bottom: 20px; }
+.faq-h-a { font-family: 'Outfit', sans-serif; font-size: 15px; color: #64748b; line-height: 1.7; margin: 0; }
+
 /* ─── Responsive ──────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .faq-a-inner { grid-template-columns: 1fr; }
   .faq-a-head { position: static; }
-  .faq-b-grid { grid-template-columns: 1fr; }
+  .faq-b-grid, .faq-f-grid { grid-template-columns: 1fr; }
 }
 </style>

@@ -9,6 +9,7 @@ const v = variants.header;
 const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
 const pathname = Astro.url.pathname;
 const isActive = (href: string) => !!href && !href.includes('#') && pathname === href;
+const phoneHref = `tel:${business.phone.replace(/\s/g, '')}`;
 ---
 
 {/* ── Variante A : classique ──────────────────────────────────────────── */}
@@ -22,8 +23,14 @@ const isActive = (href: string) => !!href && !href.includes('#') && pathname ===
       {nav.map(l => <a href={l.href} class={`nav-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="hdr-actions-a">
-      <a href={contactHref} class="btn btn-outline btn-sm">Connexion</a>
-      <a href={contactHref} class="btn btn-primary btn-sm">Prendre RDV</a>
+      <a href={phoneHref} class="hdr-phone" aria-label={`Appeler ${business.phone}`}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.94h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/>
+        </svg>
+        {business.phone}
+      </a>
+      <a href={contactHref} class="btn btn-primary btn-sm">Devis gratuit</a>
     </div>
     <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span><span></span>
@@ -44,11 +51,14 @@ const isActive = (href: string) => !!href && !href.includes('#') && pathname ===
       </nav>
     </div>
     <div class="hdr-right">
-      <span class="dispo-badge">
-        <span class="dispo-dot" aria-hidden="true"></span>
-        {business.availability}
-      </span>
-      <a href={contactHref} class="btn btn-primary btn-sm">Devis →</a>
+      <a href={phoneHref} class="hdr-phone" aria-label={`Appeler ${business.phone}`}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.94h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/>
+        </svg>
+        {business.phone}
+      </a>
+      <a href={contactHref} class="btn btn-primary btn-sm">Devis gratuit</a>
     </div>
     <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
       <span></span><span></span>
@@ -277,6 +287,16 @@ if (menuTrigger && overlayNav) {
 }
 .nav-link:hover, .nav-link-b:hover { color: var(--ink); }
 .nav-link.is-active, .nav-link-b.is-active { color: var(--ink); font-weight: 500; }
+
+/* Téléphone header */
+.hdr-phone {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; color: var(--ink);
+  text-decoration: none; white-space: nowrap;
+  transition: color 0.15s;
+}
+.hdr-phone:hover { color: var(--primary); }
+.hdr-phone svg { flex-shrink: 0; }
 .overlay-link.is-active { opacity: 0.5; }
 .mobile-link.is-active { color: var(--ink); font-weight: 600; }
 

@@ -1,0 +1,57 @@
+---
+import { seo } from '../config/site';
+
+interface Crumb {
+  label: string;
+  href?: string;
+}
+interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.label,
+    ...(item.href ? { item: `${seo.siteUrl}${item.href}` } : {}),
+  })),
+};
+---
+
+<nav class="breadcrumb" aria-label="Fil d'Ariane">
+  <ol class="breadcrumb-list">
+    {items.map((item, i) => (
+      <li class="breadcrumb-item">
+        {i < items.length - 1 && item.href
+          ? <a href={item.href} class="breadcrumb-link">{item.label}</a>
+          : <span class="breadcrumb-current" aria-current="page">{item.label}</span>
+        }
+        {i < items.length - 1 && (
+          <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<style>
+.breadcrumb { margin-bottom: 32px; }
+.breadcrumb-list {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px;
+  list-style: none; margin: 0; padding: 0;
+}
+.breadcrumb-item { display: flex; align-items: center; gap: 4px; }
+.breadcrumb-link {
+  font-size: 13px; color: var(--inkSoft); text-decoration: none;
+  transition: color 0.15s;
+}
+.breadcrumb-link:hover { color: var(--ink); }
+.breadcrumb-current { font-size: 13px; color: var(--inkFaint); }
+.breadcrumb-sep { font-size: 13px; color: var(--inkFaint); }
+</style>
