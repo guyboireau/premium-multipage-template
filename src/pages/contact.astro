@@ -1,0 +1,260 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Contactez-nous | Devis Gratuit Rénovation"
+  description="Contactez notre équipe pour discuter de votre projet de rénovation."
+>
+  <section class="page-header">
+    <div class="container">
+      <h1>Contactez-nous</h1>
+      <p>Parlons ensemble de votre futur projet.</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container grid-2">
+      <div class="contact-info">
+        <span class="subtitle">Coordonnées</span>
+        <h2>Restons en contact</h2>
+        <p>Notre équipe est à votre disposition pour répondre à toutes vos questions et vous accompagner dans votre projet.</p>
+        
+        <div class="info-items">
+          <div class="info-item">
+            <i class="ph ph-map-pin"></i>
+            <div>
+              <h3>Notre Siège</h3>
+              <p>123 Rue de la Rénovation, 75001 Paris</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="ph ph-phone"></i>
+            <div>
+              <h3>Téléphone</h3>
+              <p>01 23 45 67 89</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="ph ph-envelope"></i>
+            <div>
+              <h3>Email</h3>
+              <p>contact@votreentreprise.fr</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="opening-hours">
+          <h3>Horaires d'ouverture</h3>
+          <ul>
+            <li><span>Lundi - Vendredi :</span> <span>08:30 - 18:30</span></li>
+            <li><span>Samedi :</span> <span>09:00 - 12:00</span></li>
+            <li><span>Dimanche :</span> <span>Fermé</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="contact-form-container">
+        <form class="contact-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Nom complet</label>
+              <input type="text" id="name" name="name" placeholder="Votre nom" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="votre@email.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <input type="tel" id="phone" name="phone" placeholder="06 00 00 00 00" />
+          </div>
+          <div class="form-group">
+            <label for="project">Type de projet</label>
+            <select id="project" name="project">
+              <option value="renovation">Rénovation Complète</option>
+              <option value="salle-de-bain">Salle de Bain</option>
+              <option value="cuisine">Cuisine</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Votre message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Dites-nous en plus sur votre projet..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-accent btn-block">Envoyer ma demande</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="map-section">
+    <div class="map-placeholder">
+      <p><i class="ph ph-map-trifold"></i> Carte Interactive (Google Maps)</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-header {
+    background: var(--primary);
+    padding: 8rem 0;
+    color: white;
+    text-align: center;
+  }
+
+  .page-header h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-section {
+    padding: 8rem 0;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+  }
+
+  .subtitle {
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 2rem;
+  }
+
+  .info-items {
+    margin: 3rem 0;
+  }
+
+  .info-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .info-item i {
+    font-size: 1.8rem;
+    color: var(--accent);
+    background: var(--bg-alt);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .info-item h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    color: var(--primary);
+  }
+
+  .opening-hours {
+    background: var(--bg-alt);
+    padding: 2.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .opening-hours h3 {
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+  }
+
+  .opening-hours ul li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    color: var(--text-main);
+    font-weight: 500;
+  }
+
+  .contact-form-container {
+    background: white;
+    padding: 3.5rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--primary);
+  }
+
+  .form-group input, 
+  .form-group select, 
+  .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+
+  .form-group input:focus, 
+  .form-group select:focus, 
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(194, 157, 91, 0.1);
+  }
+
+  .btn-block {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .map-section {
+    height: 450px;
+    background: #e2e8f0;
+  }
+
+  .map-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 992px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,20 +1,171 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
-import Services from '../components/Services.astro';
-import Testimonials from '../components/Testimonials.astro';
-import Contact from '../components/Contact.astro';
-import Footer from '../components/Footer.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import Portfolio from '../components/Portfolio.astro';
+import { siteConfig } from '../config/site';
+
+const { business, seo, features } = siteConfig;
+const { hero, services, about, portfolio, cta } = siteConfig.content;
 ---
 
-<Layout title="Mon Entreprise - Site Vitrine" description="Description de votre entreprise">
-	<Header />
-	<main>
-		<Hero />
-		<Services />
-		<Testimonials />
-		<Contact />
-	</main>
-	<Footer />
+<Layout
+  title={`${business.name} — ${business.tagline}`}
+  description={seo.defaultDescription}
+>
+  <Hero
+    title={hero.h1}
+    subtitle={hero.subtitle}
+    ctaText={hero.cta1.label}
+    ctaHref={hero.cta1.href}
+    imagePath={hero.imagePath}
+  />
+
+  <section class="about-brief">
+    <div class="container grid-2">
+      <div class="about-content">
+        <span class="subtitle">{about.eyebrow}</span>
+        <h2>{about.title}</h2>
+        <p>{about.text}</p>
+        <ul class="features-list">
+          {about.features.map(f => (
+            <li><i class="ph ph-check-circle"></i> {f}</li>
+          ))}
+        </ul>
+        <a href={about.cta.href} class="btn btn-primary">{about.cta.label}</a>
+      </div>
+      <div class="about-image">
+        <img src={about.image} alt={`${business.name} - expertise`} class="img-main" />
+        <div class="experience-badge">
+          <span class="number">{about.stats[0].value}</span>
+          <span class="text">{about.stats[0].label}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ServiceGrid
+    services={[...services.items]}
+    title={services.title}
+    subtitle={services.subtitle}
+  />
+
+  {features.portfolio && (
+    <Portfolio
+      projects={[...portfolio.items]}
+      title={portfolio.title}
+      subtitle={portfolio.subtitle}
+    />
+  )}
+
+  <section class="cta-banner">
+    <div class="container">
+      <div class="cta-content">
+        <h2>{cta.title}</h2>
+        <p>{cta.subtitle}</p>
+        <a href={cta.cta.href} class="btn btn-accent btn-lg">{cta.cta.label}</a>
+      </div>
+    </div>
+  </section>
 </Layout>
+
+<style>
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-brief { padding: 10rem 0; }
+
+  .subtitle {
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    line-height: 1.2;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .features-list { margin-bottom: 3rem; }
+  .features-list li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .features-list i { color: var(--accent); font-size: 1.5rem; }
+
+  .about-image { position: relative; }
+  .img-main {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .experience-badge {
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    background: var(--primary);
+    color: white;
+    padding: 2.5rem;
+    border-radius: var(--radius-md);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+  .experience-badge .number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .experience-badge .text {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .cta-banner {
+    padding: 8rem 0;
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+    opacity: 0.1;
+  }
+  .cta-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+  .cta-content h2 { color: white; font-size: 3.5rem; margin-bottom: 1.5rem; }
+  .cta-content p { color: #cbd5e1; font-size: 1.3rem; margin-bottom: 3rem; }
+  .btn-lg { padding: 1.2rem 3rem; font-size: 1rem; }
+
+  @media (max-width: 992px) {
+    .grid-2 { grid-template-columns: 1fr; gap: 4rem; }
+    .experience-badge { left: 0; bottom: 0; position: relative; margin-top: 2rem; display: inline-block; }
+  }
+</style>

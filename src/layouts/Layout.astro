@@ -1,113 +1,395 @@
 ---
+import { ClientRouter } from 'astro:transitions';
+import { siteConfig } from '../config/site';
+
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description?: string;
+  canonical?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, canonical } = Astro.props;
+const { business, branding, seo, features } = siteConfig;
+
+const metaDescription = description ?? seo.defaultDescription;
+const canonicalUrl    = canonical ?? `${seo.siteUrl}${Astro.url.pathname}`;
+
+const navLinks = [
+  { name: 'Accueil',          href: '/' },
+  { name: 'Nos Prestations',  href: '/services' },
+  { name: 'Réalisations',     href: '/realisations' },
+  { name: 'Contact',          href: '/contact' },
+];
+
+// Schema.org LocalBusiness
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name:        business.name,
+  description: seo.defaultDescription,
+  telephone:   business.phone,
+  email:       business.email,
+  url:         seo.siteUrl,
+  address: {
+    '@type':          'PostalAddress',
+    streetAddress:    business.address.street,
+    addressLocality:  business.address.city,
+    postalCode:       business.address.postalCode,
+    addressCountry:   business.address.country,
+  },
+  openingHoursSpecification: Object.entries(business.openingHours)
+    .filter(([, hours]) => hours !== null)
+    .map(([day, hours]) => ({
+      '@type':    'OpeningHoursSpecification',
+      dayOfWeek:  `https://schema.org/${day.charAt(0).toUpperCase()}${day.slice(1)}`,
+      opens:      (hours as string).split('-')[0],
+      closes:     (hours as string).split('-')[1],
+    })),
+};
 ---
 
 <!doctype html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-		<script src="https://unpkg.com/@phosphor-icons/web"></script>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={metaDescription} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={branding.faviconPath} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Webmaster verification -->
+    {seo.googleSearchConsole && <meta name="google-site-verification" content={seo.googleSearchConsole} />}
+    {seo.bingWebmasterKey    && <meta name="msvalidate.01" content={seo.bingWebmasterKey} />}
+
+    <!-- Open Graph -->
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url"         content={canonicalUrl} />
+    <meta property="og:locale"      content={seo.locale} />
+    <meta property="og:type"        content="website" />
+    {seo.ogImage && <meta property="og:image" content={`${seo.siteUrl}${seo.ogImage}`} />}
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Schema.org LocalBusiness -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <!-- Polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href={`https://fonts.googleapis.com/css2?family=${encodeURIComponent(branding.fontHeading)}:wght@700&family=${encodeURIComponent(branding.fontBody)}:wght@300;400;500;600;700&display=swap`}
+      rel="stylesheet"
+    />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web" is:inline></script>
+
+    <!-- Analytics GA (opt-in) -->
+    {features.analytics && seo.googleAnalyticsId && (
+      <script is:inline define:vars={{ gid: seo.googleAnalyticsId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date()); gtag('config', gid);
+      </script>
+    )}
+
+    <!-- Plausible (opt-in) -->
+    {features.plausible && seo.plausibleDomain && (
+      <script is:inline defer data-domain={seo.plausibleDomain} src="https://plausible.io/js/script.js" />
+    )}
+
+    <ClientRouter />
+  </head>
+
+  <body>
+    <header id="main-header">
+      <nav class="container nav-container">
+        <a href="/" class="logo">
+          <img src={branding.logoPath} alt={business.name} height="40" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" />
+          <span style="display:none">{business.name}</span>
+        </a>
+
+        <ul class="nav-links">
+          {navLinks.map(link => (
+            <li><a href={link.href}>{link.name}</a></li>
+          ))}
+        </ul>
+
+        <a href="/contact" class="btn btn-primary nav-cta">Devis Gratuit</a>
+
+        <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+          <i class="ph ph-list"></i>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer id="main-footer">
+      <div class="container footer-grid">
+        <div class="footer-info">
+          <div class="logo">{business.name}</div>
+          <p>{siteConfig.content.footer.description}</p>
+          <div class="social-links">
+            {business.socialLinks.facebook  && <a href={business.socialLinks.facebook}  aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>}
+            {business.socialLinks.instagram && <a href={business.socialLinks.instagram} aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>}
+            {business.socialLinks.linkedin  && <a href={business.socialLinks.linkedin}  aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>}
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h3>Navigation</h3>
+          <ul>
+            {navLinks.map(link => (
+              <li><a href={link.href}>{link.name}</a></li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <ul>
+            <li><i class="ph ph-map-pin"></i> {business.address.street}, {business.address.city}</li>
+            <li><i class="ph ph-phone"></i> <a href={`tel:${business.phone}`}>{business.phone}</a></li>
+            <li><i class="ph ph-envelope"></i> <a href={`mailto:${business.email}`}>{business.email}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container">
+          <p>
+            &copy; {new Date().getFullYear()} {business.name}. Tous droits réservés.
+            &nbsp;·&nbsp; <a href="/mentions-legales">Mentions légales</a>
+            &nbsp;·&nbsp; <a href="/confidentialite">Confidentialité</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <style is:global define:vars={{
+      primary:       branding.primaryColor,
+      primaryDark:   branding.primaryDark,
+      primarySoft:   branding.primarySoft,
+      accent:        branding.accentColor,
+      fontHeading:   branding.fontHeading,
+      fontBody:      branding.fontBody,
+    }}>
+      :root {
+        --primary-light: color-mix(in srgb, var(--primary) 80%, white);
+        --text-main:  #1e293b;
+        --text-muted: #64748b;
+        --bg-main:    #ffffff;
+        --bg-alt:     #f8fafc;
+        --white:      #ffffff;
+        --border:     #e2e8f0;
+        --radius-sm:  4px;
+        --radius-md:  8px;
+        --radius-lg:  16px;
+        --shadow-sm:  0 1px 3px rgba(0,0,0,0.1);
+        --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        --shadow-lg:  0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+      body {
+        font-family: var(--fontBody), 'Outfit', sans-serif;
+        color: var(--text-main);
+        background-color: var(--bg-main);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1, h2, h3, .logo {
+        font-family: var(--fontHeading), 'Playfair Display', serif;
+      }
+
+      a { text-decoration: none; color: inherit; transition: var(--transition); }
+      ul { list-style: none; }
+      img { display: block; max-width: 100%; }
+      button { font-family: inherit; cursor: pointer; }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      /* Header */
+      #main-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        height: 80px;
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        letter-spacing: 1px;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        font-weight: 500;
+        color: var(--text-main);
+        font-size: 0.95rem;
+        position: relative;
+      }
+
+      .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--accent);
+        transition: var(--transition);
+      }
+
+      .nav-links a:hover::after { width: 100%; }
+
+      .mobile-menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: var(--primary);
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.8rem;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: white;
+      }
+      .btn-primary:hover {
+        background-color: var(--primaryDark);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-accent {
+        background-color: var(--accent);
+        color: white;
+      }
+      .btn-accent:hover {
+        filter: brightness(0.9);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+
+      /* Footer */
+      #main-footer {
+        background-color: var(--primary);
+        color: white;
+        padding: 5rem 0 0;
+        margin-top: 5rem;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1.5fr;
+        gap: 4rem;
+        margin-bottom: 4rem;
+      }
+
+      .footer-info p { margin: 1.5rem 0; color: #cbd5e1; max-width: 400px; }
+
+      .social-links { display: flex; gap: 1rem; }
+      .social-links a {
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1.2rem;
+      }
+      .social-links a:hover { background: var(--accent); color: white; }
+
+      .footer-links h3, .footer-contact h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--accent);
+        font-family: var(--fontHeading), serif;
+      }
+
+      .footer-links ul li { margin-bottom: 0.8rem; }
+      .footer-links ul a { color: #cbd5e1; }
+      .footer-links ul a:hover { color: white; padding-left: 5px; }
+
+      .footer-contact ul li {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        color: #cbd5e1;
+        align-items: flex-start;
+      }
+      .footer-contact i { color: var(--accent); font-size: 1.2rem; flex-shrink: 0; }
+      .footer-contact a { color: #cbd5e1; }
+      .footer-contact a:hover { color: white; }
+
+      .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding: 1.5rem 0;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #94a3b8;
+      }
+      .footer-bottom a { color: #94a3b8; }
+      .footer-bottom a:hover { color: white; }
+
+      @media (max-width: 768px) {
+        .nav-links, .nav-cta { display: none; }
+        .mobile-menu-toggle { display: block; }
+        .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      }
+    </style>
+  </body>
 </html>
-
-<style is:global>
-	:root {
-		--primary: #0ea5e9; /* Sky 500 */
-		--primary-dark: #0284c7; /* Sky 600 */
-		--primary-light: #e0f2fe; /* Sky 100 */
-		--secondary: #f8fafc; /* Slate 50 */
-		--text-main: #0f172a; /* Slate 900 */
-		--text-muted: #64748b; /* Slate 500 */
-		--bg-main: #ffffff;
-		--border: #e2e8f0; /* Slate 200 */
-		--radius: 0.5rem;
-		--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-		--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-		--transition: all 0.3s ease;
-	}
-
-	* {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-	}
-
-	html {
-		scroll-behavior: smooth;
-	}
-
-	body {
-		font-family: 'Outfit', sans-serif;
-		color: var(--text-main);
-		background-color: var(--bg-main);
-		line-height: 1.6;
-	}
-
-	a {
-		text-decoration: none;
-		color: inherit;
-		transition: var(--transition);
-	}
-
-	ul {
-		list-style: none;
-	}
-
-	.container {
-		width: 100%;
-		max-width: 1200px;
-		margin: 0 auto;
-		padding: 0 1.5rem;
-	}
-
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		padding: 0.75rem 1.5rem;
-		border-radius: 9999px;
-		font-weight: 600;
-		cursor: pointer;
-		border: none;
-		transition: var(--transition);
-	}
-
-	.btn-primary {
-		background-color: var(--primary);
-		color: white;
-	}
-
-	.btn-primary:hover {
-		background-color: var(--primary-dark);
-		transform: translateY(-2px);
-		box-shadow: var(--shadow-md);
-	}
-
-	.btn-secondary {
-		background-color: white;
-		color: var(--text-main);
-	}
-
-	.btn-secondary:hover {
-		background-color: var(--secondary);
-		transform: translateY(-2px);
-	}
-</style>

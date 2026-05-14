@@ -1,0 +1,174 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+
+const allServices = [
+  {
+    title: "Rénovation Complète",
+    description: "Transformation totale de vos appartements et maisons.",
+    icon: "ph-house-line",
+    href: "/services/renovation"
+  },
+  {
+    title: "Salles de Bain",
+    description: "Espaces bien-être sur mesure.",
+    icon: "ph-drop",
+    href: "/services/salle-de-bain"
+  },
+  {
+    title: "Cuisines",
+    description: "Installations haut de gamme et fonctionnelles.",
+    icon: "ph-cooking-pot",
+    href: "/services/cuisine"
+  },
+  {
+    title: "Peinture & Déco",
+    description: "Finitions soignées et conseils en décoration.",
+    icon: "ph-paint-brush",
+    href: "/services/peinture"
+  },
+  {
+    title: "Menuiserie",
+    description: "Aménagements bois et rangements intelligents.",
+    icon: "ph-hammer",
+    href: "/services/menuiserie"
+  },
+  {
+    title: "Électricité & Plomberie",
+    description: "Mise aux normes et installations techniques.",
+    icon: "ph-lightning",
+    href: "/services/technique"
+  }
+];
+---
+
+<Layout 
+  title="Nos Prestations | Expert Rénovation"
+  description="Découvrez l'ensemble de nos services pour vos travaux de rénovation."
+>
+  <section class="page-header">
+    <div class="container">
+      <h1>Nos Prestations</h1>
+      <p>Un savoir-faire artisanal au service de tous vos projets.</p>
+    </div>
+  </section>
+
+  <ServiceGrid services={allServices} />
+
+  <section class="process-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="subtitle">Notre Méthode</span>
+        <h2>Comment nous travaillons</h2>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Consultation</h3>
+          <p>Étude de votre projet et établissement d'un devis précis.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Conception</h3>
+          <p>Choix des matériaux et planification détaillée du chantier.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Réalisation</h3>
+          <p>Exécution des travaux par nos artisans qualifiés.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>Livraison</h3>
+          <p>Contrôle qualité et remise des clés de votre nouvel espace.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-header {
+    background: var(--primary);
+    padding: 8rem 0;
+    color: white;
+    text-align: center;
+  }
+
+  .page-header h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-header p {
+    color: #cbd5e1;
+    font-size: 1.2rem;
+  }
+
+  .process-section {
+    padding: 8rem 0;
+    background: white;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .subtitle {
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 3rem;
+    color: var(--primary);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+  }
+
+  .step {
+    position: relative;
+    padding-top: 3rem;
+  }
+
+  .step-num {
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--bg-alt);
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 1;
+    z-index: 0;
+    transition: var(--transition);
+  }
+
+  .step:hover .step-num {
+    color: rgba(194, 157, 91, 0.1);
+    transform: translateY(-10px);
+  }
+
+  .step h3 {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+    color: var(--primary);
+  }
+
+  .step p {
+    position: relative;
+    z-index: 1;
+    color: var(--text-muted);
+  }
+</style>

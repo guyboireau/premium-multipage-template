@@ -1,119 +1,111 @@
 ---
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaText: string;
+  ctaHref: string;
+  imagePath: string;
+}
+
+const { title, subtitle, ctaText, ctaHref, imagePath } = Astro.props;
 ---
+
 <section class="hero">
-    <div class="container hero-container">
-        <div class="hero-content">
-            <span class="badge">Professionnel & Rapide</span>
-            <h1>Votre expert de confiance pour <span>tous vos projets</span></h1>
-            <p>Une courte description pour mettre en avant votre proposition de valeur, votre expérience et pourquoi vos clients vous adorent.</p>
-            <div class="hero-actions">
-                <a href="#contact" class="btn btn-primary">
-                    Obtenir un devis gratuit <i class="ph ph-arrow-right"></i>
-                </a>
-                <a href="#services" class="btn btn-secondary">
-                    Nos services
-                </a>
-            </div>
-            <div class="hero-features">
-                <div class="feature"><i class="ph-fill ph-check-circle"></i> Intervention 48h</div>
-                <div class="feature"><i class="ph-fill ph-check-circle"></i> Devis Gratuit</div>
-                <div class="feature"><i class="ph-fill ph-check-circle"></i> Qualité Garantie</div>
-            </div>
-        </div>
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <div class="content-wrapper">
+      <span class="badge">Artisan Qualifié</span>
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
+      <div class="hero-actions">
+        <a href={ctaHref} class="btn btn-accent">{ctaText}</a>
+        <a href="/services" class="btn btn-outline">Nos Services</a>
+      </div>
     </div>
-    <div class="hero-bg"></div>
+  </div>
 </section>
 
 <style>
-    .hero {
-        position: relative;
-        padding: 10rem 0 6rem;
-        background-color: #0f172a;
-        color: white;
-        overflow: hidden;
-    }
+  .hero {
+    position: relative;
+    height: 90vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=2000'); /* Placeholder, will be customizable */
+    background-size: cover;
+    background-position: center;
+    color: white;
+  }
 
-    .hero-bg {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 50%;
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        opacity: 0.2;
-        clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
-    }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4));
+  }
 
-    .hero-container {
-        position: relative;
-        z-index: 10;
-    }
+  .hero-content {
+    position: relative;
+    z-index: 10;
+  }
 
-    .hero-content {
-        max-width: 650px;
-    }
+  .content-wrapper {
+    max-width: 700px;
+  }
 
-    .badge {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        background-color: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 50px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        margin-bottom: 1.5rem;
-    }
+  .badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-sm);
+  }
 
+  h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    font-family: 'Playfair Display', serif;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+  }
+
+  .btn-outline:hover {
+    background: white;
+    color: var(--primary);
+  }
+
+  @media (max-width: 768px) {
     h1 {
-        font-size: 3.5rem;
-        line-height: 1.1;
-        margin-bottom: 1.5rem;
+      font-size: 3rem;
     }
-
-    h1 span {
-        color: var(--primary);
-    }
-
-    p {
-        font-size: 1.25rem;
-        color: #cbd5e1;
-        margin-bottom: 2.5rem;
-    }
-
     .hero-actions {
-        display: flex;
-        gap: 1rem;
-        margin-bottom: 3rem;
+      flex-direction: column;
     }
-
-    .hero-actions .btn {
-        padding: 1rem 2rem;
-        font-size: 1.125rem;
+    .hero {
+      height: auto;
+      padding: 10rem 0 5rem;
     }
-
-    .hero-features {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-    }
-
-    .feature {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 500;
-        color: #cbd5e1;
-    }
-
-    .feature i {
-        color: var(--primary);
-        font-size: 1.25rem;
-    }
-
-    @media (max-width: 768px) {
-        h1 { font-size: 2.5rem; }
-        .hero-actions { flex-direction: column; }
-        .hero-bg { width: 100%; opacity: 0.1; clip-path: none; }
-    }
+  }
 </style>
