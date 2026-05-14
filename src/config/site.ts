@@ -15,7 +15,7 @@ export const siteConfig = {
   nav: [
     { label: 'Services',  href: '/services' },
     { label: 'Portfolio', href: '/realisations' },
-    { label: 'À propos',  href: '/a-propos' },
+    { label: 'À propos',  href: '/apropos' },
     { label: 'Tarifs',    href: '/#tarifs' }, // Reste sur l'ancre de l'index si nécessaire
     { label: 'Contact',   href: '/contact' },
   ],
@@ -119,7 +119,7 @@ export const siteConfig = {
       description: 'Contrats, création d\'entreprise, contentieux.',
     },
     about: {
-      slug:        '/a-propos',
+      slug:        '/apropos',
       title:       'À propos',
       description: 'Le Cabinet Aubry : 12 ans d\'expertise au service des entrepreneurs.',
     },
@@ -313,7 +313,7 @@ export const siteConfig = {
       links: [
         { label: 'Services',  href: '/services' },
         { label: 'Portfolio', href: '/realisations' },
-        { label: 'À propos',  href: '/a-propos' },
+        { label: 'À propos',  href: '/apropos' },
         { label: 'Tarifs',    href: '/#tarifs' },
         { label: 'FAQ',       href: '/#faq' },
         { label: 'Contact',   href: '/contact' },
