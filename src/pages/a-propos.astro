@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import About from '../components/About.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
+
+import { business, pages } from '../config/site';
+---
+
+<Layout
+  title={`${pages.about.title} | ${business.name}`}
+  description={pages.about.description}
+>
+  <Header />
+  <main>
+    <div style="padding-top: 80px;">
+      <About />
+    </div>
+    <CTA />
+  </main>
+  <Footer />
+</Layout>
