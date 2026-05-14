@@ -24,3 +24,7 @@ pnpm-debug.log*
 .idea/
 .vercel
 .env*.local
+
+# Claude Code & local tools
+.claude/
+ruvector.db
