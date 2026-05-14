@@ -9,8 +9,8 @@ const v = variants.testimonials;
 ---
 
 {/* ── Variante A : 3 cards ────────────────────────────────────────────── */}
-{v === 'A' && (
-  <section class="section section-alt" id="temoignages">
+{v === 'A' || v === 'H' && (
+  <section class="section section-alt v-only-a v-only-h" id="temoignages">
     <div class="container">
       <div class="tst-head">
         <div>
