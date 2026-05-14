@@ -1,156 +1,37 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Portfolio from '../components/Portfolio.astro';
+import Header from '../components/Header.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
 
-const projects = [
-  {
-    title: "Appartement Haussmannien",
-    category: "Rénovation Intérieure",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"
-  },
-  {
-    title: "Villa Méditerranéenne",
-    category: "Extérieur & Façade",
-    image: "https://images.unsplash.com/photo-1600607687940-477a284e68c6?auto=format&fit=crop&q=80&w=800"
-  },
-  {
-    title: "Loft Industriel",
-    category: "Aménagement",
-    image: "https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&fit=crop&q=80&w=800"
-  },
-  {
-    title: "Cuisine Design",
-    category: "Menuiserie",
-    image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=800"
-  },
-  {
-    title: "Salle de Bain Zen",
-    category: "Sanitaires",
-    image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&q=80&w=800"
-  },
-  {
-    title: "Bureau Moderne",
-    category: "Professionnel",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800"
-  }
-];
+import { business, pages, portfolio } from '../config/site';
 ---
 
-<Layout 
-  title="Nos Réalisations | Portfolio Rénovation"
-  description="Découvrez nos derniers chantiers et laissez-vous inspirer."
+<Layout
+  title={`${pages.realisations.title} | ${business.name}`}
+  description={pages.realisations.description}
 >
-  <section class="page-header">
-    <div class="container">
-      <h1>Nos Réalisations</h1>
-      <p>Découvrez l'excellence de notre travail à travers nos projets récents.</p>
-    </div>
-  </section>
-
-  <Portfolio projects={projects} />
-
-  <section class="testimonials-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="subtitle">Témoignages</span>
-        <h2>Ce que disent nos clients</h2>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>"Une équipe professionnelle, à l'écoute et un résultat qui dépasse nos attentes. Nous recommandons vivement !"</p>
-          <span class="author">Jean Dupont - Paris</span>
-        </div>
-        <div class="testimonial-card">
-          <div class="stars">★★★★★</div>
-          <p>"Le souci du détail est impressionnant. Le chantier a été rendu propre et dans les temps."</p>
-          <span class="author">Marie Lefebvre - Lyon</span>
+  <Header />
+  <main>
+    <section class="section" style="padding-top: 120px;">
+      <div class="container">
+        <p class="eyebrow">— Nos réalisations</p>
+        <h1 style="font-size: clamp(32px, 5vw, 48px); font-weight: 600; margin: 12px 0 48px;">Nos Derniers Chantiers</h1>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 32px;">
+          {portfolio.items.map(item => (
+            <article class="card">
+              <div class="img-placeholder" style="aspect-ratio: 4/3; border-radius: var(--radius-md) var(--radius-md) 0 0;"></div>
+              <div style="padding: 24px;">
+                <p class="eyebrow" style="margin-bottom: 8px;">{item.category}</p>
+                <h3 style="font-size: 20px; font-weight: 600; color: var(--ink);">{item.title}</h3>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+    <CTA />
+  </main>
+  <Footer />
 </Layout>
-
-<style>
-  .page-header {
-    background: var(--primary);
-    padding: 8rem 0;
-    color: white;
-    text-align: center;
-  }
-
-  .page-header h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-  }
-
-  .page-header p {
-    color: #cbd5e1;
-    font-size: 1.2rem;
-  }
-
-  .testimonials-section {
-    padding: 8rem 0;
-    background: var(--bg-alt);
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 5rem;
-  }
-
-  .subtitle {
-    color: var(--accent);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 0.9rem;
-    display: block;
-    margin-bottom: 1rem;
-  }
-
-  h2 {
-    font-size: 3rem;
-    color: var(--primary);
-  }
-
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-  }
-
-  .testimonial-card {
-    background: white;
-    padding: 3rem;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .stars {
-    color: var(--accent);
-    margin-bottom: 1.5rem;
-    font-size: 1.2rem;
-  }
-
-  .testimonial-card p {
-    font-style: italic;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    color: var(--text-main);
-  }
-
-  .author {
-    font-weight: 700;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-  }
-
-  @media (max-width: 768px) {
-    .testimonials-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
