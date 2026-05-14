@@ -11,13 +11,14 @@
 // ═════════════════════════════════════════════════════════════════════════════
 
 export const siteConfig = {
-  // Navigation (landing 1 page)
+  // Navigation (multipage)
   nav: [
-    { label: 'Services',  href: '#services' },
-    { label: 'À propos',  href: '#apropos' },
-    { label: 'Tarifs',    href: '#tarifs' },
-    { label: 'FAQ',       href: '#faq' },
-    { label: 'Contact',   href: '#contact' },
+    { label: 'Services',      href: '/services' },
+    { label: 'À propos',      href: '/apropos' },
+    { label: 'Réalisations',  href: '/realisations' },
+    { label: 'Tarifs',        href: '/tarifs' },
+    { label: 'FAQ',           href: '/faq' },
+    { label: 'Contact',       href: '/contact' },
   ],
 
   // ── 1. INFORMATIONS BUSINESS ───────────────────────────────────────────────
@@ -129,6 +130,16 @@ export const siteConfig = {
       slug:        '/realisations',
       title:       'Réalisations',
       description: 'Nos projets récents.',
+    },
+    tarifs: {
+      slug:        '/tarifs',
+      title:       'Tarifs',
+      description: 'Nos offres et tarifs.',
+    },
+    faq: {
+      slug:        '/faq',
+      title:       'FAQ',
+      description: 'Questions fréquentes.',
     },
     contact: {
       slug:        '/contact',
@@ -309,11 +320,11 @@ export const siteConfig = {
     footer: {
       description: '[Description courte de l\'entreprise pour le bas de page.]',
       links: [
-        { label: 'Services',  href: '#services' },
-        { label: 'À propos',  href: '#apropos' },
-        { label: 'Tarifs',    href: '#tarifs' },
-        { label: 'FAQ',       href: '#faq' },
-        { label: 'Contact',   href: '#contact' },
+        { label: 'Services',  href: '/services' },
+        { label: 'À propos',  href: '/apropos' },
+        { label: 'Tarifs',    href: '/tarifs' },
+        { label: 'FAQ',       href: '/faq' },
+        { label: 'Contact',   href: '/contact' },
       ],
       legal: [
         { label: 'Mentions légales', href: '/mentions-legales' },

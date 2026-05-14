@@ -7,6 +7,8 @@ import { variants, business, nav, branding } from '../config/site';
 
 const v = variants.header;
 const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
+const pathname = Astro.url.pathname;
+const isActive = (href: string) => !!href && !href.includes('#') && pathname === href;
 ---
 
 {/* ── Variante A : classique ──────────────────────────────────────────── */}
@@ -17,7 +19,7 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       <span class="logo-text">{business.name}</span>
     </a>
     <nav class="nav-desktop" aria-label="Navigation principale">
-      {nav.map(l => <a href={l.href} class="nav-link">{l.label}</a>)}
+      {nav.map(l => <a href={l.href} class={`nav-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="hdr-actions-a">
       <a href={contactHref} class="btn btn-outline btn-sm">Connexion</a>
@@ -38,7 +40,7 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       </a>
       <div class="hdr-sep" aria-hidden="true"></div>
       <nav class="nav-b">
-        {nav.map(l => <a href={l.href} class="nav-link-b">{l.label}</a>)}
+        {nav.map(l => <a href={l.href} class={`nav-link-b${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
       </nav>
     </div>
     <div class="hdr-right">
@@ -80,7 +82,7 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
 <div class="overlay-menu" id="overlay-nav">
   <button class="overlay-close" id="overlay-close">&times;</button>
   <nav class="overlay-nav" aria-label="Navigation principale">
-    {nav.map(l => <a href={l.href} class="overlay-link">{l.label}</a>)}
+    {nav.map(l => <a href={l.href} class={`overlay-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
   <a href={contactHref} class="btn btn-primary btn-lg overlay-cta">Réserver un appel</a>
 </div>
@@ -90,12 +92,15 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
   <div class="hdr-e-inner">
     <a href="/" class="hdr-e-logo">{business.name}</a>
     <nav class="hdr-e-nav" aria-label="Navigation principale">
-      {nav.map(l => <a href={l.href} class="hdr-e-link">{l.label}</a>)}
+      {nav.map(l => <a href={l.href} class={`hdr-e-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="hdr-e-actions">
       <span class="hdr-e-lang">FR · EN</span>
       <a href={contactHref} class="hdr-e-btn">Réserver</a>
     </div>
+    <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -109,7 +114,7 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       </a>
       <div class="hdr-f-sep" aria-hidden="true"></div>
       <nav class="hdr-f-nav">
-        {nav.map(l => <a href={l.href} class="hdr-f-link">{l.label}</a>)}
+        {nav.map(l => <a href={l.href} class={`hdr-f-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
       </nav>
     </div>
     <div class="hdr-f-right">
@@ -119,6 +124,9 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       </span>
       <a href={contactHref} class="hdr-f-btn">Demander une démo →</a>
     </div>
+    <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -130,9 +138,12 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       {business.name}
     </a>
     <nav class="hdr-g-nav" aria-label="Navigation principale">
-      {nav.map(l => <a href={l.href} class="hdr-g-link">{l.label}</a>)}
+      {nav.map(l => <a href={l.href} class={`hdr-g-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <a href={contactHref} class="hdr-g-btn">Prendre rendez-vous</a>
+    <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 {/* ── Variante H : Artisan — Style ABPM Richard ─────────────────────────── */}
@@ -142,11 +153,14 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       {business.name}
     </a>
     <nav class="hdr-h-nav" aria-label="Navigation principale">
-      {nav.map(l => <a href={l.href} class="hdr-h-link">{l.label}</a>)}
+      {nav.map(l => <a href={l.href} class={`hdr-h-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <a href={contactHref} class="hdr-h-cta">
       Contactez-nous <i class="ph ph-arrow-right"></i>
     </a>
+    <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 {/* ── Variante D : Forge / Brutalist Warm ────────────────────────────── */}
@@ -157,19 +171,22 @@ const contactHref = nav.find(n => n.label === 'Contact')?.href || '#contact';
       <span class="hdr-d-est">EST. 2012</span>
     </div>
     <nav class="hdr-d-nav" aria-label="Navigation principale">
-      {nav.map(l => <a href={l.href} class="hdr-d-link">{l.label}</a>)}
+      {nav.map(l => <a href={l.href} class={`hdr-d-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="hdr-d-actions">
       <span class="hdr-d-open">ATELIER OUVERT · LUN–VEN</span>
       <a href={contactHref} class="hdr-d-btn">Devis →</a>
     </div>
+    <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
 {/* ── Mobile menu (partagé A + B) ─────────────────────────────────────── */}
-<div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-label="Menu mobile">
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Menu mobile">
   <nav>
-    {nav.map(l => <a href={l.href} class="mobile-link">{l.label}</a>)}
+    {nav.map(l => <a href={l.href} class={`mobile-link${isActive(l.href) ? ' is-active' : ''}`} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
   </nav>
   <a href={contactHref} class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 8px;">
     Prendre RDV
@@ -259,6 +276,9 @@ if (menuTrigger && overlayNav) {
   white-space: nowrap;
 }
 .nav-link:hover, .nav-link-b:hover { color: var(--ink); }
+.nav-link.is-active, .nav-link-b.is-active { color: var(--ink); font-weight: 500; }
+.overlay-link.is-active { opacity: 0.5; }
+.mobile-link.is-active { color: var(--ink); font-weight: 600; }
 
 /* ─── Variante A ───────────────────────────────────────────────────────── */
 .nav-desktop {
@@ -327,6 +347,7 @@ if (menuTrigger && overlayNav) {
 @media (max-width: 900px) {
   .nav-desktop, .hdr-actions-a, .hdr-left .hdr-sep, .hdr-left .nav-b, .hdr-right { display: none; }
   .burger { display: flex; }
+  .hdr-inner { justify-content: space-between; }
 }
 
 /* ─── Variante E : Le Salon ───────────────────────────────────────────── */
@@ -351,6 +372,7 @@ if (menuTrigger && overlayNav) {
   font-size: 14px; color: #5a504a; transition: color 0.15s;
 }
 .hdr-e-link:hover { color: #1a1612; }
+.hdr-e-link.is-active { color: #1a1612; font-weight: 600; }
 .hdr-e-actions { display: flex; align-items: center; gap: 18px; margin-left: auto; }
 .hdr-e-lang {
   font-family: 'JetBrains Mono', monospace;
@@ -394,6 +416,7 @@ if (menuTrigger && overlayNav) {
   font-size: 14px; color: #3d4458; transition: color 0.15s;
 }
 .hdr-f-link:hover { color: #0a0e1a; }
+.hdr-f-link.is-active { color: #0a0e1a; font-weight: 500; }
 .hdr-f-right { display: flex; align-items: center; gap: 20px; }
 .hdr-f-dispo {
   display: flex; align-items: center; gap: 7px;
@@ -434,6 +457,7 @@ if (menuTrigger && overlayNav) {
   font-size: 14px; color: #5a5f50; transition: color 0.15s;
 }
 .hdr-g-link:hover { color: #3e4a3a; }
+.hdr-g-link.is-active { color: #3e4a3a; font-weight: 600; }
 .hdr-g-btn {
   font-family: 'DM Sans', sans-serif; font-weight: 500;
   font-size: 14px; padding: 10px 20px;
@@ -444,9 +468,12 @@ if (menuTrigger && overlayNav) {
 }
 .hdr-g-btn:hover { background: #2a3427; }
 @media (max-width: 900px) {
-  .hdr-e-nav, .hdr-e-lang { display: none; }
-  .hdr-f-nav, .hdr-f-dispo { display: none; }
-  .hdr-g-nav { display: none; }
+  .hdr-e-nav, .hdr-e-lang, .hdr-e-actions { display: none; }
+  .hdr-e-inner { padding: 0 24px; justify-content: space-between; }
+  .hdr-f-nav, .hdr-f-dispo, .hdr-f-right { display: none; }
+  .hdr-g-nav, .hdr-g-btn { display: none; }
+  .hdr-g { padding: 12px 16px; }
+  .hdr-g-pill { border-radius: 16px; justify-content: space-between; }
 }
 
 /* ─── Variante D : Forge ───────────────────────────────────────────────── */
@@ -478,6 +505,7 @@ if (menuTrigger && overlayNav) {
   transition: color 0.15s;
 }
 .hdr-d-link:hover { color: #c08c3c; }
+.hdr-d-link.is-active { color: #241c12; font-weight: 600; }
 .hdr-d-actions {
   display: flex; align-items: center; gap: 16px; margin-left: auto;
 }
@@ -496,7 +524,8 @@ if (menuTrigger && overlayNav) {
 }
 .hdr-d-btn:hover { background: #c08c3c; border-color: #241c12; color: #241c12; }
 @media (max-width: 900px) {
-  .hdr-d-nav, .hdr-d-open { display: none; }
+  .hdr-d-nav, .hdr-d-open, .hdr-d-btn { display: none; }
+  .hdr-d-inner { padding: 0 24px; justify-content: space-between; }
 }
 
 /* ─── Variante H : Artisan — Style ABPM Richard ─────────────────────────── */
@@ -524,6 +553,7 @@ if (menuTrigger && overlayNav) {
   color: #64748b; text-decoration: none; transition: color 0.2s;
 }
 .hdr-h-nav a:hover { color: #0ea5e9; }
+.hdr-h-nav a.is-active { color: #0ea5e9; font-weight: 600; }
 .hdr-h-cta {
   display: inline-flex; align-items: center; gap: 0.5rem;
   padding: 0.75rem 1.5rem;
@@ -535,7 +565,7 @@ if (menuTrigger && overlayNav) {
 .hdr-h-cta:hover {
   background: #0284c7; transform: translateY(-2px);
 }
-@media (max-width: 768px) {
-  .hdr-h-nav { display: none; }
+@media (max-width: 900px) {
+  .hdr-h-nav, .hdr-h-cta { display: none; }
 }
 </style>

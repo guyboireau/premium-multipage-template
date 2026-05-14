@@ -1,21 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Contact from '../components/Contact.astro';
+import FAQ from '../components/FAQ.astro';
+import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
 
 import { business, pages } from '../config/site';
 ---
 
 <Layout
-  title={`${pages.contact.title} | ${business.name}`}
-  description={pages.contact.description}
+  title={`${pages.faq.title} | ${business.name}`}
+  description={pages.faq.description}
 >
   <Header />
   <main id="main-content">
     <div style="padding-top: 80px;">
-      <Contact />
+      <FAQ />
     </div>
+    <CTA />
   </main>
   <Footer />
 </Layout>

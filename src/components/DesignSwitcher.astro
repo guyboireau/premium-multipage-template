@@ -77,8 +77,16 @@
       document.getElementById('overlay-nav')?.classList.remove('open');
       document.body.style.overflow = '';
 
+      switcher?.classList.remove('open');
       localStorage.setItem('demo-variant', variant);
     });
+  });
+
+  // Close panel on outside click
+  document.addEventListener('click', (e) => {
+    if (switcher && !switcher.contains(e.target as Node)) {
+      switcher.classList.remove('open');
+    }
   });
 
   // Load Initial State
@@ -110,6 +118,7 @@
     align-items: center;
     gap: 10px;
     padding: 12px 20px;
+    min-height: 44px;
     background: #1a1916;
     color: #fff;
     border: none;
@@ -121,12 +130,13 @@
     transition: transform 0.2s;
   }
   .ds-toggle:hover { transform: scale(1.05); }
+  .ds-toggle:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
   .ds-panel {
     position: absolute;
     bottom: calc(100% + 12px);
     right: 0;
-    width: 240px;
+    width: min(240px, calc(100vw - 48px));
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 16px;
@@ -135,7 +145,7 @@
     opacity: 0;
     transform: translateY(10px);
     pointer-events: none;
-    transition: all 0.2s;
+    transition: opacity 0.2s, transform 0.2s;
   }
   .ds-container.open .ds-panel {
     opacity: 1;
@@ -153,8 +163,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 5px;
-    padding: 8px 4px;
+    padding: 10px 4px;
+    min-height: 44px;
     background: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
@@ -162,6 +174,7 @@
     transition: all 0.15s;
   }
   .ds-btn:hover { background: #f3f4f6; }
+  .ds-btn:focus-visible { outline: 2px solid #374151; outline-offset: 2px; }
   .ds-btn.active { border-color: #374151; background: #f3f4f6; }
 
   /* Active colors per variant */

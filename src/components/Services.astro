@@ -358,6 +358,10 @@ const icons: Record<string, string> = {
   font-size: 11px; color: #8a8074; letter-spacing: 0.1em; text-align: right;
 }
 @media (max-width: 900px) { .srv-e-grid { grid-template-columns: 1fr; gap: 32px; } }
+@media (max-width: 768px) {
+  .srv-e-row { grid-template-columns: 44px 1fr; gap: 16px; }
+  .srv-e-arrow { display: none; }
+}
 
 /* ─── F : Stade ───────────────────────────────────────────────────────── */
 .srv-f { background: #fafbfc; }
