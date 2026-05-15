@@ -16,7 +16,11 @@ const phoneHref = `tel:${business.phone.replace(/\s/g, '')}`;
 <header class="hdr hdr-a v-only-a" id="main-header-a">
   <div class="container hdr-inner">
     <a href="/" class="logo" aria-label="Accueil">
-      <img src={branding.logoPath} alt={business.name} height="32" />
+      {business.icon ? (
+        <i class={`ph-fill ph-${business.icon}`} style="font-size: 24px; color: var(--primary);"></i>
+      ) : (
+        <img src={branding.logoPath} alt={business.name} height="32" style="width: auto; object-fit: contain;" />
+      )}
       <span class="logo-text">{business.name}</span>
     </a>
     <nav class="nav-desktop" aria-label="Navigation principale">
@@ -43,7 +47,11 @@ const phoneHref = `tel:${business.phone.replace(/\s/g, '')}`;
   <div class="container hdr-inner">
     <div class="hdr-left">
       <a href="/" class="logo-b" aria-label="Accueil">
-        <img src={branding.logoPath} alt={business.name} height="24" />
+        {business.icon ? (
+          <i class={`ph-fill ph-${business.icon}`} style="font-size: 20px; color: var(--ink);"></i>
+        ) : (
+          <img src={branding.logoPath} alt={business.name} height="24" style="width: auto; object-fit: contain;" />
+        )}
       </a>
       <div class="hdr-sep" aria-hidden="true"></div>
       <nav class="nav-b">
@@ -70,7 +78,13 @@ const phoneHref = `tel:${business.phone.replace(/\s/g, '')}`;
 <header class="hdr hdr-c v-only-c" id="main-header-c">
   <div class="container hdr-inner">
     <a href="/" class="logo-c">
-      <div class="logo-mark">{business.name.charAt(0)}</div>
+      <div class="logo-mark">
+        {business.icon ? (
+          <i class={`ph-fill ph-${business.icon}`} style="font-size: 18px;"></i>
+        ) : (
+          business.name.charAt(0)
+        )}
+      </div>
       <div class="logo-info">
         <span class="logo-name">{business.name}</span>
         <span class="logo-tag">{business.tagline}</span>

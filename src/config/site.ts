@@ -25,7 +25,8 @@ export const siteConfig = {
   business: {
     name:     '[NOM DE L\'ENTREPRISE]',
     tagline:  '[VOTRE SLOGAN ICI]',
-    industry: 'services',          // juridique | artisan | sante | restaurant | tech | btp
+    industry: 'services',          // utilisé pour schema.org + choix de contenu IA
+    icon:     'wrench',            // Icône de métier (Phosphor icon name sans le préfixe ph-)
     phone:    '+33 6 00 00 00 00',
     email:    'contact@votre-domaine.fr',
     address: {

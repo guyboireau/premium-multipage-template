@@ -242,7 +242,7 @@ const v = variants.hero;
       </div>
     </div>
   </div>
-  <div class="hero-h-bg"></div>
+  <div class="hero-h-bg" style={`background-image: linear-gradient(to right, #0f172a 20%, rgba(15, 23, 42, 0.2) 100%), url(${hero.image})`}></div>
 </section>
 
 <style>
@@ -750,7 +750,6 @@ const v = variants.hero;
   position: absolute;
   top: 0; right: 0; bottom: 0;
   width: 100%;
-  background-image: linear-gradient(to right, #0f172a 40%, #0f172a 100%);
   background-size: cover;
   background-position: center;
   opacity: 0.6;
