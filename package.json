@@ -11,6 +11,10 @@
     "preview": "astro preview",
     "astro": "astro"
   },
+  "overrides": {
+    "path-to-regexp": "^6.3.0",
+    "devalue": "^5.8.1"
+  },
   "dependencies": {
     "@astrojs/vercel": "^10.0.6",
     "astro": "^6.3.1",
