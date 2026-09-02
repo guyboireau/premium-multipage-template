@@ -19,5 +19,8 @@
   },
   "overrides": {
     "path-to-regexp": "^6.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1"
   }
 }
