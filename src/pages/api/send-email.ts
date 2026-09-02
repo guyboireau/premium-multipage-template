@@ -79,19 +79,24 @@ export const POST: APIRoute = async ({ request }) => {
         const ville = body.ville ?? '';
         const type = body.type ?? '';
 
-        if (!nom || !email || !message) {
+        /* Le formulaire rend « Email » facultatif et « Téléphone » obligatoire :
+           on exige donc nom + message + au moins un moyen de recontact. */
+        if (!nom || !message || (!email && !telephone)) {
             return json(400, { error: 'Champs manquants' });
         }
-        if (typeof nom !== 'string' || typeof email !== 'string' || typeof message !== 'string') {
+        if (typeof nom !== 'string' || typeof message !== 'string') {
             return json(400, { error: 'Types invalides' });
         }
-        if (nom.length > 100 || email.length > 254 || message.length > 5000) {
+        if (email && typeof email !== 'string') {
+            return json(400, { error: 'Types invalides' });
+        }
+        if (nom.length > 100 || message.length > 5000 || (email && email.length > 254)) {
             return json(400, { error: 'Champs trop longs' });
         }
 
         const safe = {
             nom: escapeHtml(nom),
-            email: escapeHtml(email),
+            email: escapeHtml(String(email ?? '')),
             message: escapeHtml(message).replace(/\n/g, '<br>'),
             telephone: escapeHtml(String(telephone)),
             ville: escapeHtml(String(ville)),
@@ -102,12 +107,13 @@ export const POST: APIRoute = async ({ request }) => {
             // ⚠️ Remplacer par un expéditeur de votre domaine vérifié dans Resend.
             from: `Contact ${business.name} <onboarding@resend.dev>`,
             to: [business.email],
-            replyTo: safe.email,
+            // replyTo seulement si le visiteur a laissé un email (champ facultatif)
+            ...(safe.email ? { replyTo: safe.email } : {}),
             subject: `Nouveau message de ${safe.nom}${safe.type ? ` — ${safe.type}` : ''}`,
             html: `
                 <h3>Nouveau message depuis le site</h3>
                 <p><strong>Nom :</strong> ${safe.nom}</p>
-                <p><strong>Email :</strong> ${safe.email}</p>
+                ${safe.email ? `<p><strong>Email :</strong> ${safe.email}</p>` : ''}
                 ${safe.telephone ? `<p><strong>Téléphone :</strong> ${safe.telephone}</p>` : ''}
                 ${safe.ville ? `<p><strong>Ville :</strong> ${safe.ville}</p>` : ''}
                 ${safe.type ? `<p><strong>Type de demande :</strong> ${safe.type}</p>` : ''}
