@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Astro-6.3-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro" />
+  <img src="https://img.shields.io/badge/Astro-7.0-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Vercel-Ready-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel" />
   <img src="https://img.shields.io/badge/Resend-Emailing-black?style=flat-square&logo=minutemailer&logoColor=white" alt="Resend" />
@@ -68,7 +68,7 @@ npm run dev
 Le squelette du site (Header, Footer, variables de couleurs globales) se trouve ici. Modifiez les variables CSS dans `:root` pour adapter le site à la charte graphique de l'entreprise.
 
 ### 2. Contenu des Pages (`src/pages/`)
-Vous trouverez ici les différentes vues du site (`index.astro`, `services.astro`, `portfolio.astro`, `contact.astro`). Vous pouvez modifier les textes et intégrer vos propres images dans les composants de ces pages.
+Vous trouverez ici les différentes vues du site (`index.astro`, `services.astro`, `realisations.astro`, `apropos.astro`, `tarifs.astro`, `faq.astro`, `contact.astro`). Vous pouvez modifier les textes et intégrer vos propres images dans les composants de ces pages.
 
 ### 3. Composants Réutilisables (`src/components/`)
 Les éléments d'interface comme `Hero`, `ServiceGrid`, `PortfolioGallery`, etc., sont modulables. Si vous changez le style d'un composant, la modification s'appliquera sur l'ensemble des pages l'utilisant.
@@ -77,7 +77,7 @@ Les éléments d'interface comme `Hero`, `ServiceGrid`, `PortfolioGallery`, etc.
 Le template utilise [Resend](https://resend.com) pour la gestion des emails.
 1. Créez un compte et obtenez une clé API.
 2. Ajoutez-la dans votre fichier `.env` : `RESEND_API_KEY=re_...`
-3. Vérifiez et ajustez l'adresse de réception dans la logique API du formulaire (`src/pages/api/...`).
+3. Le destinataire est `business.email` (`src/config/site.ts`) ; remplacez l'expéditeur `onboarding@resend.dev` par un domaine vérifié dans `src/pages/api/send-email.ts`.
 
 ---
 

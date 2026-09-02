@@ -1,7 +1,7 @@
 # 🤖 Guide de Développement — Premium Multipage Template
 
 > Template de site vitrine « premium » multipage (Astro), destiné à être **cloné et personnalisé par client** (artisans, BTP, services). Projet interne de Guy Boireau.
-> Ce document décrit l'**état réel du code**, pas une spécification. Dernière synchro : 2026-07-01.
+> Ce document décrit l'**état réel du code**, pas une spécification. Dernière synchro : 2026-09-02.
 
 ---
 
@@ -17,7 +17,7 @@
 ## 🛠️ Stack technique (réelle)
 
 ```yaml
-Framework:    Astro 6.3.1 (rendu SSR via adapter Vercel)
+Framework:    Astro 7.0.x (rendu SSR via adapter Vercel)
 Language:     TypeScript (tsconfig extends astro/tsconfigs/strict)
 UI:           Composants .astro natifs (aucun framework JS UI — pas de React/Vue)
 Styling:      CSS pur, scoped par composant + <style is:global> dans Layout.astro
@@ -25,9 +25,10 @@ Styling:      CSS pur, scoped par composant + <style is:global> dans Layout.astr
               PAS de Tailwind, PAS de fichier de config CSS externe
 Icons:        Phosphor Icons (web, via <script unpkg>) + emojis + SVG inline
 Fonts:        Google Fonts (Outfit, Geist, Kalam, + fonts par variante) via <link>
-Email:        resend 6.12.3 (dépendance présente, voir ⚠️ endpoint manquant)
+Email:        resend 6.12.3 (utilisé par src/pages/api/send-email.ts)
 Env:          dotenv 17.4.2
-Adapter:      @astrojs/vercel 10.0.6
+Types:        @types/node (devDependency — pour `process.env` dans les routes API)
+Adapter:      @astrojs/vercel 11.0.x
 Node:         >= 22.12.0
 Déploiement:  Vercel
 ```
@@ -60,7 +61,9 @@ premium-multipage-template/
 │       ├── index.astro         # Accueil (assemble toutes les sections)
 │       ├── services.astro  apropos.astro  realisations.astro
 │       ├── tarifs.astro  faq.astro  contact.astro
-│       └── sitemap.xml.ts      # Sitemap dynamique (endpoint GET)
+│       ├── api/send-email.ts   # Endpoint contact (Resend, prerender=false)
+│       └── sitemap.xml.ts      # Sitemap (URLs dérivées de siteConfig.pages)
+├── .env.example                # RESEND_API_KEY
 ├── astro.config.mjs            # defineConfig({ adapter: vercel() })
 ├── vercel.json                 # En-têtes de sécurité (CSP, HSTS, X-Frame-Options…)
 ├── tsconfig.json
@@ -72,9 +75,9 @@ premium-multipage-template/
 ## 🗂️ Pages / sections
 
 **Pages (multipage, routing par fichier dans `src/pages/`)** :
-`/` (accueil), `/services`, `/apropos`, `/realisations`, `/tarifs`, `/faq`, `/contact`, `/sitemap.xml`.
+`/` (accueil), `/services`, `/apropos`, `/realisations`, `/tarifs`, `/faq`, `/contact`, `/sitemap.xml`, `/api/send-email` (POST).
 
-> ⚠️ Décalage à connaître : `siteConfig.pages` déclare aussi `blog` et `about` en `/a-propos`, mais la page réelle est **`apropos.astro` → `/apropos`**. `nav` (dans `site.ts`) pointe correctement vers `/apropos`. Le blog est **désactivé** (`features.blog: false`) et n'a pas de page.
+> `siteConfig.pages` est la source de vérité des URLs : `sitemap.xml.ts` lit les `slug` déclarés là. Toute nouvelle page doit donc exister à la fois dans `src/pages/`, dans `siteConfig.pages` (slug identique au nom de fichier), dans `siteConfig.nav` et dans `staticRoutes`. Le blog n'a ni page ni entrée `pages` (`features.blog: false`).
 
 **Sections composables** (chaque section est un composant, piloté par `siteConfig.content`) :
 Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact — assemblées dans `index.astro`. Certaines sont conditionnées par `features` (`{features.pricing && <Pricing/>}`, `testimonials`).
@@ -93,9 +96,8 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 
 ## 🔐 Variables d'environnement
 
-- Aucun fichier `.env` ni `.env.example` présent dans le repo (README mentionne pourtant `cp .env.example .env`).
-- `dotenv` est installé et `resend` prévu → attend une clé **`RESEND_API_KEY`** (à ajouter dans Vercel).
-- Aucun `import.meta.env` / `process.env` n'est lu dans le code actuel (voir gap contact ci-dessous).
+- `.env.example` est présent (`cp .env.example .env`) et ne contient que **`RESEND_API_KEY`**, à définir aussi dans Vercel.
+- Cette clé est lue **à l'exécution** via `process.env.RESEND_API_KEY`, **dans le handler** de `api/send-email.ts`. Ne pas la lire via `import.meta.env` au niveau module : Vite substitue ces expressions au build, une variable absente au moment du build serait figée à `undefined` dans le bundle de prod.
 
 ---
 
@@ -111,13 +113,13 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 - Frontend multipage complet et stylé (8 pages, 12 composants, ~5700 lignes .astro).
 - SEO solide : metadata + OpenGraph + JSON-LD `LocalBusiness` (index & contact), sitemap dynamique, `robots.txt`, canonical, hooks opt-in GA/Plausible/Sentry.
 - Config centralisée exemplaire (`site.ts`) + système de variantes de design.
+- Formulaire de contact opérationnel : `Contact.astro` → `POST /api/send-email` (Resend, rate-limit IP, honeypot `website`, escaping HTML).
 
 **Gaps / points de vigilance :**
-1. **Formulaire de contact non fonctionnel** : `Contact.astro` fait `fetch('/api/send-email', POST)` mais **il n'existe aucun `src/pages/api/`**. Endpoint Resend à créer.
-2. Pas de `.env.example` (contrairement au README).
-3. Décalage `pages.about` (`/a-propos`) vs page réelle `/apropos` ; `pages.blog` déclaré mais feature off.
-4. Aucun test, aucun lint configuré.
-5. Contenu = placeholders `[...]` — normal pour un template, à remplir par client.
+1. Expéditeur `onboarding@resend.dev` codé en dur dans `api/send-email.ts` : à remplacer par un domaine vérifié Resend chez chaque client (le destinataire, lui, vient de `business.email`).
+2. Aucun test, aucun lint configuré. Le type-check n'est pas installé par défaut : `npm i --no-save @astrojs/check typescript && npx astro check`.
+3. `<body class="v-a">` est codé en dur dans `Layout.astro` : `design.variants.*` (par section) n'est pas appliqué au rendu, seul le `DesignSwitcher` change la variante côté client.
+4. Contenu = placeholders `[...]` — normal pour un template, à remplir par client.
 
 ---
 
@@ -128,11 +130,12 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 3. **Ajouter une page** : créer `src/pages/<slug>.astro` (importer `Layout`, `Header`, `Footer`, `Breadcrumb`), ajouter l'entrée dans `siteConfig.nav`/`pages`, et l'ajouter à `staticRoutes` dans `sitemap.xml.ts`.
 4. **Ajouter une section** : créer `src/components/<Section>.astro`, alimenter son contenu dans `siteConfig.content`, l'importer dans `index.astro` (conditionner via `features` si optionnelle).
 5. **Styling** : ajuster les tokens dans `branding` (site.ts) et le bloc `<style is:global>` de `Layout.astro`. Pour les variantes, cibler `.v-x ...` dans le `<style>` du composant concerné.
-6. **Formulaire contact** : pour le rendre fonctionnel, créer `src/pages/api/send-email.ts` (`APIRoute` POST) utilisant `resend` + `RESEND_API_KEY` (le front l'appelle déjà).
-7. **CSP** : tout nouveau domaine externe (script/font/image/CDN) doit être ajouté à la CSP de `vercel.json`, sinon il sera bloqué en prod.
-8. **SEO** : chaque page définit `title`/`description` via `Layout` ; JSON-LD `LocalBusiness` déjà en place — le maintenir cohérent avec `business` (site.ts).
-9. **Monolingue FR** : pas d'i18n. `features.multilingual` existe mais n'est pas implémenté.
-10. **Icônes** : Phosphor via unpkg (noms sans préfixe `ph-` dans `business.icon`) + emojis dans `certifications`.
+6. **Formulaire contact** : `src/pages/api/send-email.ts` (`APIRoute` POST, `prerender = false`). Il exige `nom`, `message` et **au moins** un email ou un téléphone (le formulaire rend l'email facultatif) ; garder le honeypot `website` présent dans `Contact.astro` **et** son contrôle serveur.
+7. **Variantes A→H** : chaque section rend **toutes** ses mises en page, chacune portant ses classes `v-only-<x>` ; c'est le CSS de `Layout.astro` qui n'en affiche qu'une. Ne pas conditionner le rendu en JS (`{v === 'A' && …}`) : la section disparaîtrait dès que la variante change côté client.
+8. **CSP** : tout nouveau domaine externe (script/font/image/CDN) doit être ajouté à la CSP de `vercel.json`, sinon il sera bloqué en prod.
+9. **SEO** : chaque page définit `title`/`description` via `Layout` ; JSON-LD `LocalBusiness` déjà en place — le maintenir cohérent avec `business` (site.ts).
+10. **Monolingue FR** : pas d'i18n. `features.multilingual` existe mais n'est pas implémenté.
+11. **Icônes** : Phosphor via unpkg (noms sans préfixe `ph-` dans `business.icon`) + emojis dans `certifications`.
 
 ---
 
