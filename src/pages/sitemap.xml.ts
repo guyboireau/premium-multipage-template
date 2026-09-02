@@ -4,14 +4,16 @@ import { siteConfig } from '../config/site';
 const { seo, pages } = siteConfig;
 const baseUrl = seo.siteUrl.replace(/\/$/, '');
 
+// Les URLs proviennent de siteConfig.pages : une seule source de vérité, donc
+// pas de divergence possible entre la config, la navigation et le sitemap.
 const staticRoutes = [
-  { loc: '/',              priority: '1.0', changefreq: 'weekly'  },
-  { loc: '/services',      priority: '0.9', changefreq: 'monthly' },
-  { loc: '/realisations',  priority: '0.8', changefreq: 'weekly'  },
-  { loc: '/tarifs',        priority: '0.8', changefreq: 'monthly' },
-  { loc: '/apropos',       priority: '0.7', changefreq: 'monthly' },
-  { loc: '/faq',           priority: '0.7', changefreq: 'monthly' },
-  { loc: '/contact',       priority: '0.6', changefreq: 'yearly'  },
+  { loc: pages.home.slug,         priority: '1.0', changefreq: 'weekly'  },
+  { loc: pages.services.slug,     priority: '0.9', changefreq: 'monthly' },
+  { loc: pages.realisations.slug, priority: '0.8', changefreq: 'weekly'  },
+  { loc: pages.tarifs.slug,       priority: '0.8', changefreq: 'monthly' },
+  { loc: pages.about.slug,        priority: '0.7', changefreq: 'monthly' },
+  { loc: pages.faq.slug,          priority: '0.7', changefreq: 'monthly' },
+  { loc: pages.contact.slug,      priority: '0.6', changefreq: 'yearly'  },
 ];
 
 export const GET: APIRoute = () => {
