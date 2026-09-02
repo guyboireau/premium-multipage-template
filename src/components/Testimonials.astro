@@ -1,116 +1,110 @@
 ---
-// Testimonials — 3 variantes
-// A : 3 cards (safe classique)
-// B : Citation pleine page — 1 citation grande + navigation
-// C : Mur d'avis compact — grille dense
-import { variants, testimonials } from '../config/site';
-
-const v = variants.testimonials;
+// Testimonials — 3 mises en page, réparties sur les 8 variantes (A→H)
+// A (variantes A, H) : 3 cards (safe classique)
+// B (variante B)     : Citation pleine page — 1 citation grande + liste
+// C (variantes C→G)  : Mur d'avis compact — grille dense
+// Comme les autres sections, toutes les mises en page sont rendues et c'est
+// le CSS `.v-only-*` (Layout.astro) qui affiche celle de la variante active.
+import { testimonials } from '../config/site';
 ---
 
 {/* ── Variante A : 3 cards ────────────────────────────────────────────── */}
-{v === 'A' || v === 'H' && (
-  <section class="section section-alt v-only-a v-only-h" id="temoignages">
-    <div class="container">
-      <div class="tst-head">
-        <div>
-          <p class="eyebrow">{testimonials.eyebrow}</p>
-          <h2 class="tst-h2">{testimonials.title}</h2>
-        </div>
-        <p class="tst-rating eyebrow">{testimonials.ratingStr}</p>
-      </div>
-      <div class="tst-a-grid">
-        {testimonials.items.map((t) => (
-          <article class="card tst-a-card">
-            <div class="stars" aria-label="5 étoiles">
-              {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
-            </div>
-            <blockquote class="tst-a-quote">"{t.quote}"</blockquote>
-            <div class="tst-a-divider"></div>
-            <div class="tst-a-author">
-              <span class="tst-avatar" aria-hidden="true">{t.initial}</span>
-              <div>
-                <p class="tst-name">{t.name}</p>
-                <p class="tst-role eyebrow">{t.role}</p>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-)}
-
-{/* ── Variante B : citation pleine page ──────────────────────────────── */}
-{v === 'B' && (
-  <section class="section" id="temoignages">
-    <div class="container tst-b-inner">
-      <div class="tst-b-left">
+<section class="section section-alt v-only-a v-only-h" id="temoignages">
+  <div class="container">
+    <div class="tst-head">
+      <div>
         <p class="eyebrow">{testimonials.eyebrow}</p>
         <h2 class="tst-h2">{testimonials.title}</h2>
-        <p class="tst-rating eyebrow" style="margin-top: 8px;">{testimonials.ratingStr}</p>
       </div>
-      <div class="tst-b-right">
-        <div class="tst-b-featured">
-          <div class="stars" aria-label="5 étoiles" style="margin-bottom: 20px;">
+      <p class="tst-rating eyebrow">{testimonials.ratingStr}</p>
+    </div>
+    <div class="tst-a-grid">
+      {testimonials.items.map((t) => (
+        <article class="card tst-a-card">
+          <div class="stars" aria-label="5 étoiles">
             {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
           </div>
-          <blockquote class="tst-b-quote">"{testimonials.items[0].quote}"</blockquote>
-          <div class="tst-b-author">
-            <span class="tst-avatar tst-avatar-lg" aria-hidden="true">{testimonials.items[0].initial}</span>
+          <blockquote class="tst-a-quote">"{t.quote}"</blockquote>
+          <div class="tst-a-divider"></div>
+          <div class="tst-a-author">
+            <span class="tst-avatar" aria-hidden="true">{t.initial}</span>
             <div>
-              <p class="tst-name">{testimonials.items[0].name}</p>
-              <p class="tst-role eyebrow">{testimonials.items[0].role}</p>
+              <p class="tst-name">{t.name}</p>
+              <p class="tst-role eyebrow">{t.role}</p>
             </div>
           </div>
-        </div>
-        <div class="tst-b-mini-list">
-          {testimonials.items.slice(1).map((t) => (
-            <article class="tst-b-mini">
-              <span class="tst-avatar tst-avatar-sm" aria-hidden="true">{t.initial}</span>
-              <div>
-                <p class="tst-b-mini-quote">"{t.quote.slice(0, 80)}…"</p>
-                <p class="tst-role eyebrow">{t.name} · {t.role}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
+        </article>
+      ))}
     </div>
-  </section>
-)}
+  </div>
+</section>
 
-{/* ── Variante C : mur d'avis compact ────────────────────────────────── */}
-{v === 'C' && (
-  <section class="section section-alt" id="temoignages">
-    <div class="container">
-      <div class="tst-head">
-        <div>
-          <p class="eyebrow">{testimonials.eyebrow}</p>
-          <h2 class="tst-h2">{testimonials.title}</h2>
+{/* ── Variante B : citation pleine page ──────────────────────────────── */}
+<section class="section v-only-b" id="temoignages">
+  <div class="container tst-b-inner">
+    <div class="tst-b-left">
+      <p class="eyebrow">{testimonials.eyebrow}</p>
+      <h2 class="tst-h2">{testimonials.title}</h2>
+      <p class="tst-rating eyebrow" style="margin-top: 8px;">{testimonials.ratingStr}</p>
+    </div>
+    <div class="tst-b-right">
+      <div class="tst-b-featured">
+        <div class="stars" aria-label="5 étoiles" style="margin-bottom: 20px;">
+          {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
         </div>
-        <p class="tst-rating eyebrow">{testimonials.ratingStr}</p>
+        <blockquote class="tst-b-quote">"{testimonials.items[0].quote}"</blockquote>
+        <div class="tst-b-author">
+          <span class="tst-avatar tst-avatar-lg" aria-hidden="true">{testimonials.items[0].initial}</span>
+          <div>
+            <p class="tst-name">{testimonials.items[0].name}</p>
+            <p class="tst-role eyebrow">{testimonials.items[0].role}</p>
+          </div>
+        </div>
       </div>
-      <div class="tst-c-grid">
-        {testimonials.items.map((t) => (
-          <article class="tst-c-card">
-            <div class="stars" aria-label="5 étoiles">
-              {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
-            </div>
-            <blockquote class="tst-c-quote">"{t.quote}"</blockquote>
-            <div class="tst-c-author">
-              <span class="tst-avatar tst-avatar-sm" aria-hidden="true">{t.initial}</span>
-              <div>
-                <p class="tst-name">{t.name}</p>
-                <p class="tst-role eyebrow">{t.role}</p>
-              </div>
+      <div class="tst-b-mini-list">
+        {testimonials.items.slice(1).map((t) => (
+          <article class="tst-b-mini">
+            <span class="tst-avatar tst-avatar-sm" aria-hidden="true">{t.initial}</span>
+            <div>
+              <p class="tst-b-mini-quote">"{t.quote.slice(0, 80)}…"</p>
+              <p class="tst-role eyebrow">{t.name} · {t.role}</p>
             </div>
           </article>
         ))}
       </div>
     </div>
-  </section>
-)}
+  </div>
+</section>
+
+{/* ── Variante C : mur d'avis compact ────────────────────────────────── */}
+<section class="section section-alt v-only-c v-only-d v-only-e v-only-f v-only-g" id="temoignages">
+  <div class="container">
+    <div class="tst-head">
+      <div>
+        <p class="eyebrow">{testimonials.eyebrow}</p>
+        <h2 class="tst-h2">{testimonials.title}</h2>
+      </div>
+      <p class="tst-rating eyebrow">{testimonials.ratingStr}</p>
+    </div>
+    <div class="tst-c-grid">
+      {testimonials.items.map((t) => (
+        <article class="tst-c-card">
+          <div class="stars" aria-label="5 étoiles">
+            {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
+          </div>
+          <blockquote class="tst-c-quote">"{t.quote}"</blockquote>
+          <div class="tst-c-author">
+            <span class="tst-avatar tst-avatar-sm" aria-hidden="true">{t.initial}</span>
+            <div>
+              <p class="tst-name">{t.name}</p>
+              <p class="tst-role eyebrow">{t.role}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
 
 <style>
 .tst-h2 {

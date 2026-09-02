@@ -397,7 +397,7 @@ export const siteConfig = {
 } as const;
 
 // ─── Re-exports nommés (compat avec les composants existants) ──────────────
-export type Variant = 'A' | 'B' | 'C';
+export type Variant = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 
 export const { business, branding, seo, design, features, pages, nav, content } = siteConfig;
 export const variants  = siteConfig.design.variants;
