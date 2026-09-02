@@ -138,15 +138,13 @@ export const siteConfig = {
       description: 'Découvrez nos prestations.',
     },
     about: {
-      slug:        '/a-propos',
+      slug:        '/apropos',   // doit correspondre à src/pages/apropos.astro
       title:       'À propos',
       description: 'En savoir plus sur notre entreprise.',
     },
-    blog: {
-      slug:        '/blog',
-      title:       'Blog',
-      description: 'Actualités et conseils.',
-    },
+    // Pas d'entrée `blog` : la feature est désactivée (features.blog: false) et
+    // aucune page src/pages/blog.astro n'existe. Pour l'activer : créer la page,
+    // ajouter l'entrée ici + dans `nav` et dans staticRoutes (sitemap.xml.ts).
     realisations: {
       slug:        '/realisations',
       title:       'Réalisations',
@@ -397,7 +395,7 @@ export const siteConfig = {
 } as const;
 
 // ─── Re-exports nommés (compat avec les composants existants) ──────────────
-export type Variant = 'A' | 'B' | 'C';
+export type Variant = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 
 export const { business, branding, seo, design, features, pages, nav, content } = siteConfig;
 export const variants  = siteConfig.design.variants;

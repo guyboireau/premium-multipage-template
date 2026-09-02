@@ -39,7 +39,7 @@ import { contact, business } from '../config/site';
                 <circle cx="12" cy="10" r="3"/>
               </svg>
             </span>
-            <span>{business.address.street}, {business.address.zip} {business.address.city}</span>
+            <span>{business.address.street}, {business.address.postalCode} {business.address.city}</span>
           </div>
         )}
       </div>
@@ -47,6 +47,14 @@ import { contact, business } from '../config/site';
 
     <div class="cnt-form-wrap">
       <form class="cnt-form" id="contact-form" novalidate>
+        {/* Honeypot anti-spam : invisible pour les humains, rempli par les bots.
+            Le serveur (src/pages/api/send-email.ts) rejette toute requête où
+            « website » est renseigné. Ne pas supprimer. */}
+        <div class="cnt-hp" aria-hidden="true">
+          <label for="cnt-website">Ne pas remplir</label>
+          <input type="text" id="cnt-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
         {/* Type de demande */}
         <div class="cnt-field">
           <label for="cnt-type" class="cnt-label">Type de demande *</label>
@@ -191,6 +199,13 @@ form?.addEventListener('submit', async (e) => {
   width: 32px; height: 32px; border-radius: var(--radius-sm);
   background: var(--lineSoft); flex-shrink: 0;
   display: flex; align-items: center; justify-content: center; color: var(--ink);
+}
+
+/* Honeypot anti-spam : hors écran plutôt que display:none (certains bots
+   ignorent les champs masqués par display) */
+.cnt-hp {
+  position: absolute; left: -9999px; top: auto;
+  width: 1px; height: 1px; overflow: hidden;
 }
 
 /* Form wrapper */
