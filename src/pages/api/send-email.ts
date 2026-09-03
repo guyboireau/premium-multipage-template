@@ -1,75 +1,37 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
-import { business } from '../../config/site';
+import {
+    badRequestResponse,
+    checkRateLimit,
+    escapeHtml,
+    getClientIP,
+    getFromAddress,
+    getNotificationRecipient,
+    getResendApiKey,
+    isHoneypotFilled,
+    json,
+    missingApiKeyResponse,
+    tooManyRequestsResponse,
+} from '../../lib/email';
 
 export const prerender = false;
 
-/* ─── Rate limiter simple (in-memory, par IP) ──────────────────────────── */
-interface RateLimitEntry {
-    count: number;
-    resetTime: number;
-}
-const rateLimitMap = new Map<string, RateLimitEntry>();
-const RATE_LIMIT_MAX = 3;
-const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
-
-function getClientIP(request: Request): string {
-    const xfwd = request.headers.get('x-forwarded-for');
-    if (xfwd) return xfwd.split(',')[0].trim();
-    return request.headers.get('x-real-ip') ?? 'unknown';
-}
-
-function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
-    const now = Date.now();
-    const entry = rateLimitMap.get(ip);
-    if (!entry || now > entry.resetTime) {
-        rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
-        return { allowed: true };
-    }
-    if (entry.count >= RATE_LIMIT_MAX) {
-        return { allowed: false, retryAfter: Math.ceil((entry.resetTime - now) / 1000) };
-    }
-    entry.count += 1;
-    return { allowed: true };
-}
-
-function escapeHtml(str: string): string {
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-const json = (status: number, body: unknown, extraHeaders: Record<string, string> = {}) =>
-    new Response(JSON.stringify(body), {
-        status,
-        headers: { 'Content-Type': 'application/json', ...extraHeaders },
-    });
+/* ─── Anti-abus : quotas propres à ce formulaire ───────────────────────── */
+const RATE_LIMIT = { max: 3, windowMs: 5 * 60 * 1000 } as const;
 
 export const POST: APIRoute = async ({ request }) => {
     try {
-        const ip = getClientIP(request);
-        const rate = checkRateLimit(ip);
-        if (!rate.allowed) {
-            return json(429, { error: 'Trop de requêtes, veuillez réessayer plus tard.' }, {
-                'Retry-After': String(rate.retryAfter),
-            });
-        }
+        const rate = checkRateLimit('send-email', getClientIP(request), RATE_LIMIT);
+        if (!rate.allowed) return tooManyRequestsResponse(rate.retryAfter);
 
-        const apiKey = process.env.RESEND_API_KEY;
-        if (!apiKey) {
-            return json(503, { error: 'RESEND_API_KEY non configurée' });
-        }
+        const apiKey = getResendApiKey();
+        if (!apiKey) return missingApiKeyResponse();
         const resend = new Resend(apiKey);
 
         const body = await request.json();
 
         /* ─── Honeypot : champ caché que les bots remplissent ─────────────── */
-        if (body.website) {
-            return json(400, { error: 'Requête invalide' });
-        }
+        if (isHoneypotFilled(body)) return badRequestResponse();
 
         /* ─── Champs du formulaire de contact (voir src/components/Contact.astro) ─ */
         const nom = body.nom ?? body.name;
@@ -82,16 +44,16 @@ export const POST: APIRoute = async ({ request }) => {
         /* Le formulaire rend « Email » facultatif et « Téléphone » obligatoire :
            on exige donc nom + message + au moins un moyen de recontact. */
         if (!nom || !message || (!email && !telephone)) {
-            return json(400, { error: 'Champs manquants' });
+            return badRequestResponse('Champs manquants');
         }
         if (typeof nom !== 'string' || typeof message !== 'string') {
-            return json(400, { error: 'Types invalides' });
+            return badRequestResponse('Types invalides');
         }
         if (email && typeof email !== 'string') {
-            return json(400, { error: 'Types invalides' });
+            return badRequestResponse('Types invalides');
         }
         if (nom.length > 100 || message.length > 5000 || (email && email.length > 254)) {
-            return json(400, { error: 'Champs trop longs' });
+            return badRequestResponse('Champs trop longs');
         }
 
         const safe = {
@@ -103,10 +65,11 @@ export const POST: APIRoute = async ({ request }) => {
             type: escapeHtml(String(type)),
         };
 
-        const data = await resend.emails.send({
-            // ⚠️ Remplacer par un expéditeur de votre domaine vérifié dans Resend.
-            from: `Contact ${business.name} <onboarding@resend.dev>`,
-            to: [business.email],
+        const { data, error: sendError } = await resend.emails.send({
+            // Expéditeur : siteConfig.email.from, ou l'env RESEND_FROM.
+            // Doit appartenir à un domaine vérifié dans Resend.
+            from: getFromAddress(),
+            to: [getNotificationRecipient()],
             // replyTo seulement si le visiteur a laissé un email (champ facultatif)
             ...(safe.email ? { replyTo: safe.email } : {}),
             subject: `Nouveau message de ${safe.nom}${safe.type ? ` — ${safe.type}` : ''}`,
@@ -122,8 +85,19 @@ export const POST: APIRoute = async ({ request }) => {
             `,
         });
 
-        return json(200, { success: true, data });
-    } catch {
+        // ⚠️ Le SDK Resend NE LÈVE PAS d'exception sur erreur d'API : il résout
+        // avec { data: null, error: {...} }. Sans ce contrôle, la route
+        // répondait 200 « success » alors qu'aucun email n'était parti.
+        if (sendError) {
+            console.error('[send-email] Resend:', sendError);
+            return json(502, { error: "L'email n'a pas pu être envoyé." });
+        }
+
+        // On ne renvoie que l'id : le payload Resend complet fuiterait des
+        // détails internes vers le navigateur.
+        return json(200, { success: true, id: data?.id ?? null });
+    } catch (error) {
+        console.error('[send-email]', error);
         return json(500, { error: 'Erreur serveur' });
     }
 };
