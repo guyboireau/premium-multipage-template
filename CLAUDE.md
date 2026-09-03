@@ -1,7 +1,7 @@
 # 🤖 Guide de Développement — Premium Multipage Template
 
 > Template de site vitrine « premium » multipage (Astro), destiné à être **cloné et personnalisé par client** (artisans, BTP, services). Projet interne de Guy Boireau.
-> Ce document décrit l'**état réel du code**, pas une spécification. Dernière synchro : 2026-09-02.
+> Ce document décrit l'**état réel du code**, pas une spécification. Dernière synchro : 2026-09-03.
 
 ---
 
@@ -25,7 +25,7 @@ Styling:      CSS pur, scoped par composant + <style is:global> dans Layout.astr
               PAS de Tailwind, PAS de fichier de config CSS externe
 Icons:        Phosphor Icons (web, via <script unpkg>) + emojis + SVG inline
 Fonts:        Google Fonts (Outfit, Geist, Kalam, + fonts par variante) via <link>
-Email:        resend 6.12.3 (utilisé par src/pages/api/send-email.ts)
+Email:        resend 6.12.3 (via les helpers partagés de src/lib/email.ts)
 Env:          dotenv 17.4.2
 Types:        @types/node (devDependency — pour `process.env` dans les routes API)
 Adapter:      @astrojs/vercel 11.0.x
@@ -46,6 +46,9 @@ premium-multipage-template/
 │   ├── favicon.ico / favicon.svg
 │   └── robots.txt
 ├── src/
+│   ├── lib/
+│   │   └── email.ts            # Helpers Resend partagés : env runtime, from/to, escapeHtml,
+│   │                           #   rate-limit par IP/route, honeypot, réponses normalisées
 │   ├── config/
 │   │   └── site.ts             # ⭐ CONFIG UNIQUE : business, branding, seo, design,
 │   │                           #    pages, features, content (hero/services/…/portfolio)
@@ -116,7 +119,7 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 - Formulaire de contact opérationnel : `Contact.astro` → `POST /api/send-email` (Resend, rate-limit IP, honeypot `website`, escaping HTML).
 
 **Gaps / points de vigilance :**
-1. Expéditeur `onboarding@resend.dev` codé en dur dans `api/send-email.ts` : à remplacer par un domaine vérifié Resend chez chaque client (le destinataire, lui, vient de `business.email`).
+1. Expéditeur et destinataire viennent désormais de `siteConfig.email` (`from`/`to`, surchargeables par `RESEND_FROM`/`CONTACT_EMAIL_TO`), avec repli sur `business.email`. **`email.from` reste à renseigner par client** : la valeur par défaut est un placeholder, et Resend refuse tout domaine non vérifié.
 2. Aucun test, aucun lint configuré. Le type-check n'est pas installé par défaut : `npm i --no-save @astrojs/check typescript && npx astro check`.
 3. `<body class="v-a">` est codé en dur dans `Layout.astro` : `design.variants.*` (par section) n'est pas appliqué au rendu, seul le `DesignSwitcher` change la variante côté client.
 4. Contenu = placeholders `[...]` — normal pour un template, à remplir par client.
@@ -130,7 +133,8 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 3. **Ajouter une page** : créer `src/pages/<slug>.astro` (importer `Layout`, `Header`, `Footer`, `Breadcrumb`), ajouter l'entrée dans `siteConfig.nav`/`pages`, et l'ajouter à `staticRoutes` dans `sitemap.xml.ts`.
 4. **Ajouter une section** : créer `src/components/<Section>.astro`, alimenter son contenu dans `siteConfig.content`, l'importer dans `index.astro` (conditionner via `features` si optionnelle).
 5. **Styling** : ajuster les tokens dans `branding` (site.ts) et le bloc `<style is:global>` de `Layout.astro`. Pour les variantes, cibler `.v-x ...` dans le `<style>` du composant concerné.
-6. **Formulaire contact** : `src/pages/api/send-email.ts` (`APIRoute` POST, `prerender = false`). Il exige `nom`, `message` et **au moins** un email ou un téléphone (le formulaire rend l'email facultatif) ; garder le honeypot `website` présent dans `Contact.astro` **et** son contrôle serveur.
+6. **Formulaire contact** : `src/pages/api/send-email.ts` (`APIRoute` POST, `prerender = false`). Il exige `nom`, `message` et **au moins** un email ou un téléphone (le formulaire rend l'email facultatif) ; garder le honeypot `website` présent dans `Contact.astro` **et** son contrôle serveur. Toute route qui déclenche un envoi doit passer par les gardes de `src/lib/email.ts` (`checkRateLimit` + `isHoneypotFilled`) plutôt que de les réécrire en local, et lire `from`/`to` via `getFromAddress()`/`getNotificationRecipient()` — jamais en dur.
+12. **SDK Resend** : `resend.emails.send()` **ne lève pas** d'exception en cas d'erreur d'API — il résout `{ data: null, error }`. Toujours tester `error` avant de répondre un succès, et ne jamais renvoyer le payload Resend complet au navigateur (fuite de détails internes) : seul l'`id` sort.
 7. **Variantes A→H** : chaque section rend **toutes** ses mises en page, chacune portant ses classes `v-only-<x>` ; c'est le CSS de `Layout.astro` qui n'en affiche qu'une. Ne pas conditionner le rendu en JS (`{v === 'A' && …}`) : la section disparaîtrait dès que la variante change côté client.
 8. **CSP** : tout nouveau domaine externe (script/font/image/CDN) doit être ajouté à la CSP de `vercel.json`, sinon il sera bloqué en prod.
 9. **SEO** : chaque page définit `title`/`description` via `Layout` ; JSON-LD `LocalBusiness` déjà en place — le maintenir cohérent avec `business` (site.ts).

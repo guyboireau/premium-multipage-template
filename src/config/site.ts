@@ -74,6 +74,18 @@ export const siteConfig = {
     },
   },
 
+  // ── 1b. EMAIL TRANSACTIONNEL ───────────────────────────────────────────────
+  //
+  // ⚠️ `from` DOIT appartenir à un domaine vérifié dans Resend.
+  // L'ancienne valeur codée en dur, `onboarding@resend.dev`, est le bac à sable
+  // de Resend : il n'accepte d'expédier que vers l'adresse du titulaire du
+  // compte. Laissé tel quel chez un client, le formulaire de contact échoue
+  // silencieusement pour tout autre destinataire.
+  email: {
+    from: 'Contact <contact@votre-domaine.fr>', // expéditeur (domaine vérifié Resend)
+    to:   '',                                   // destinataire ; vide ⇒ business.email
+  },
+
   // ── 2. BRANDING ────────────────────────────────────────────────────────────
   branding: {
     primaryColor:    '#3b82f6',   // Bleu standard
@@ -398,6 +410,7 @@ export const siteConfig = {
 export type Variant = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 
 export const { business, branding, seo, design, features, pages, nav, content } = siteConfig;
+export const email        = siteConfig.email;
 export const variants  = siteConfig.design.variants;
 export const hero         = siteConfig.content.hero;
 export const services     = siteConfig.content.services;
