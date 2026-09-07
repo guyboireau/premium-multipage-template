@@ -70,6 +70,15 @@ export function escapeHtml(str: unknown): string {
 //  Anti-abus partagé : rate limiting + honeypot
 //
 //  Toute route qui déclenche un envoi d'email DOIT passer par ces deux gardes.
+//  Sans elles, un endpoint public devient un robinet ouvert : un robot fait
+//  expédier du courrier en boucle depuis le domaine vérifié du client, noie sa
+//  boîte et brûle sa réputation d'expéditeur.
+//
+//  `/api/send-email` n'écrit aujourd'hui qu'à `getNotificationRecipient()`,
+//  une adresse fixe. Le jour où une route répond aussi au visiteur (accusé de
+//  réception vers l'adresse qu'il a saisie — c'est le cas de `/api/send-quote`
+//  dans `site-vitrine-template`), l'endpoint devient un amplificateur : le
+//  robot choisit alors la destination. Ces gardes sont ce qui sépare les deux.
 // ═════════════════════════════════════════════════════════════════════════════
 
 interface RateLimitEntry {
