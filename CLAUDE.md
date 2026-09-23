@@ -17,7 +17,7 @@
 ## 🛠️ Stack technique (réelle)
 
 ```yaml
-Framework:    Astro 7.0.x (rendu SSR via adapter Vercel)
+Framework:    Astro 7.3.x (rendu SSR via adapter Vercel)
 Language:     TypeScript (tsconfig extends astro/tsconfigs/strict)
 UI:           Composants .astro natifs (aucun framework JS UI — pas de React/Vue)
 Styling:      CSS pur, scoped par composant + <style is:global> dans Layout.astro
@@ -66,7 +66,7 @@ premium-multipage-template/
 │       ├── tarifs.astro  faq.astro  contact.astro
 │       ├── api/send-email.ts   # Endpoint contact (Resend, prerender=false)
 │       └── sitemap.xml.ts      # Sitemap (URLs dérivées de siteConfig.pages)
-├── .env.example                # RESEND_API_KEY
+├── .env.example                # RESEND_API_KEY (+ RESEND_FROM, CONTACT_EMAIL_TO optionnelles)
 ├── astro.config.mjs            # defineConfig({ adapter: vercel() })
 ├── vercel.json                 # En-têtes de sécurité (CSP, HSTS, X-Frame-Options…)
 ├── tsconfig.json
@@ -99,8 +99,8 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 
 ## 🔐 Variables d'environnement
 
-- `.env.example` est présent (`cp .env.example .env`) et ne contient que **`RESEND_API_KEY`**, à définir aussi dans Vercel.
-- Cette clé est lue **à l'exécution** via `process.env.RESEND_API_KEY`, **dans le handler** de `api/send-email.ts`. Ne pas la lire via `import.meta.env` au niveau module : Vite substitue ces expressions au build, une variable absente au moment du build serait figée à `undefined` dans le bundle de prod.
+- `.env.example` est présent (`cp .env.example .env`). Seule **`RESEND_API_KEY`** est obligatoire, à définir aussi dans Vercel. `RESEND_FROM` et `CONTACT_EMAIL_TO`, commentées, surchargent l'expéditeur et le destinataire de `siteConfig.email`.
+- La clé est lue **à l'exécution** via `process.env.RESEND_API_KEY`, par `getResendApiKey()` (`src/lib/email.ts`), appelée **dans le handler** de `api/send-email.ts`. Ne pas la lire via `import.meta.env` au niveau module : Vite substitue ces expressions au build, une variable absente au moment du build serait figée à `undefined` dans le bundle de prod.
 
 ---
 
