@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Astro-7.0-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro" />
+  <img src="https://img.shields.io/badge/Astro-7-FF5D01?style=flat-square&logo=astro&logoColor=white" alt="Astro" />
   <img src="https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Vercel-Ready-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel" />
   <img src="https://img.shields.io/badge/Resend-Emailing-black?style=flat-square&logo=minutemailer&logoColor=white" alt="Resend" />
@@ -20,7 +20,7 @@
 
 ## 📖 Présentation
 
-Inspiré des meilleurs standards du web moderne, ce template **Multi-Pages** vous permet de déployer rapidement un site complet avec un rendu "Premium". Il intègre des animations fluides, une typographie soignée (*Playfair Display* & *Outfit* par défaut), et une architecture performante (zéro JavaScript bloquant par défaut).
+Inspiré des meilleurs standards du web moderne, ce template **Multi-Pages** vous permet de déployer rapidement un site complet avec un rendu "Premium". Il intègre des animations fluides, une typographie soignée (*Outfit* par défaut), et une architecture performante (zéro JavaScript bloquant par défaut).
 
 Il comprend des pages dédiées pour :
 - **Accueil** : Présentation globale et appel à l'action (Hero, Services phares).
@@ -33,8 +33,7 @@ Il comprend des pages dédiées pour :
 ## ✨ Fonctionnalités incluses
 
 - 🚀 **Performance Astro** : Architecture optimisée offrant la rapidité du statique tout en permettant du dynamisme.
-- 💫 **View Transitions** : Navigation fluide de type "App" entre les pages (transitions sans rechargement visuel de la page entière).
-- 🎨 **Design Premium** : Palette de couleurs sophistiquées ("Navy & Gold", modifiable facilement), polices élégantes.
+- 🎨 **Design Premium** : Palette bleu et ambre par défaut, modifiable dans `branding` (`src/config/site.ts`), polices élégantes.
 - 📱 **100% Responsive** : Expérience parfaite sur mobile, tablette et desktop.
 - ✉️ **Formulaire de contact intégré** : Opérationnel via l'API **Resend**.
 - 🔍 **SEO Ready** : Structure sémantique HTML5 robuste et balises meta personnalisables pour un classement Google optimal.
@@ -64,20 +63,20 @@ npm run dev
 
 ## 🛠️ Personnalisation du Template
 
-### 1. Structure et Design (`src/layouts/Layout.astro`)
-Le squelette du site (Header, Footer, variables de couleurs globales) se trouve ici. Modifiez les variables CSS dans `:root` pour adapter le site à la charte graphique de l'entreprise.
+### 1. Couleurs et polices (`src/config/site.ts`)
+Les couleurs et les polices se règlent dans l'objet `branding` de `src/config/site.ts`. `src/layouts/Layout.astro` (balises `<head>`, SEO, chargement des polices, styles globaux) les injecte en variables CSS (`--primary`, `--primaryDark`, `--primarySoft`, `--accent`) via `define:vars` : les couleurs ne se modifient pas dans son bloc `:root`.
 
 ### 2. Contenu des Pages (`src/pages/`)
 Vous trouverez ici les différentes vues du site (`index.astro`, `services.astro`, `realisations.astro`, `apropos.astro`, `tarifs.astro`, `faq.astro`, `contact.astro`). Vous pouvez modifier les textes et intégrer vos propres images dans les composants de ces pages.
 
 ### 3. Composants Réutilisables (`src/components/`)
-Les éléments d'interface comme `Hero`, `ServiceGrid`, `PortfolioGallery`, etc., sont modulables. Si vous changez le style d'un composant, la modification s'appliquera sur l'ensemble des pages l'utilisant.
+Les éléments d'interface comme `Hero`, `Services`, `Testimonials`, etc., sont modulables. Si vous changez le style d'un composant, la modification s'appliquera sur l'ensemble des pages l'utilisant.
 
 ### 4. Formulaire de Contact (Resend)
 Le template utilise [Resend](https://resend.com) pour la gestion des emails.
 1. Créez un compte et obtenez une clé API.
 2. Ajoutez-la dans votre fichier `.env` : `RESEND_API_KEY=re_...`
-3. Le destinataire est `business.email` (`src/config/site.ts`) ; remplacez l'expéditeur `onboarding@resend.dev` par un domaine vérifié dans `src/pages/api/send-email.ts`.
+3. Renseignez l'expéditeur dans `email.from` (`src/config/site.ts`) ou dans la variable `RESEND_FROM`, qui a priorité : il doit appartenir à un domaine vérifié dans Resend. Le destinataire est `CONTACT_EMAIL_TO`, sinon `email.to`, sinon `business.email`.
 
 ---
 
@@ -97,12 +96,12 @@ Déployer ce site est extrêmement simple grâce à l'intégration officielle d'
 ```text
 premium-multipage-template/
 ├── src/
-│   ├── components/      # Composants UI (Hero, Navbar, Footer, Cards)
+│   ├── components/      # Composants UI (Header, Hero, Services, Footer…)
 │   ├── layouts/         # Layout principal (Layout.astro)
 │   └── pages/           # Pages (index.astro, services.astro, etc.) et APIs
 ├── public/              # Assets statiques (Images, Favicon, robots.txt)
 ├── astro.config.mjs     # Fichier de configuration Astro
-└── vercel.json          # Paramètres de sécurité / cache pour Vercel
+└── vercel.json          # En-têtes de sécurité (CSP, HSTS…) pour Vercel
 ```
 
 ---
