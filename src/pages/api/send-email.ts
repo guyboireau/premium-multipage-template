@@ -72,7 +72,7 @@ export const POST: APIRoute = async ({ request }) => {
             to: [getNotificationRecipient()],
             // replyTo seulement si le visiteur a laissé un email (champ facultatif)
             ...(safe.email ? { replyTo: safe.email } : {}),
-            subject: `Nouveau message de ${safe.nom}${safe.type ? ` — ${safe.type}` : ''}`,
+            subject: `Nouveau message de ${safe.nom}${safe.type ? ` : ${safe.type}` : ''}`,
             html: `
                 <h3>Nouveau message depuis le site</h3>
                 <p><strong>Nom :</strong> ${safe.nom}</p>

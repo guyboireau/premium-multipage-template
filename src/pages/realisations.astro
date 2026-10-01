@@ -36,7 +36,7 @@ const schema = {
         ]} />
         <p class="eyebrow">Nos réalisations</p>
         <h1 class="real-h1">Nos Derniers Chantiers</h1>
-        <p class="real-intro">Avant / après — chaque projet raconte une transformation.</p>
+        <p class="real-intro">Avant et après, projet par projet.</p>
 
         <div class="real-grid">
           {portfolio.items.map((item) => (
@@ -46,13 +46,13 @@ const schema = {
                 <div class="real-ba-col">
                   <div class="real-ba-label">Avant</div>
                   <div class="img-placeholder real-img" style={`background-image: url('${item.before}')`}
-                       role="img" aria-label={`Avant — ${item.title}`}></div>
+                       role="img" aria-label={`Avant : ${item.title}`}></div>
                 </div>
                 <div class="real-ba-divider" aria-hidden="true">→</div>
                 <div class="real-ba-col">
                   <div class="real-ba-label real-ba-label--after">Après</div>
                   <div class="img-placeholder real-img" style={`background-image: url('${item.after}')`}
-                       role="img" aria-label={`Après — ${item.title}`}></div>
+                       role="img" aria-label={`Après : ${item.title}`}></div>
                 </div>
               </div>
 

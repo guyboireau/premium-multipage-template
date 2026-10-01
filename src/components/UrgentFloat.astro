@@ -9,7 +9,7 @@ const phone = urgency.phone.replace(/\s/g, '');
   <a
     href={`tel:${phone}`}
     class="urgent-float"
-    aria-label={`${urgency.label} — appeler ${urgency.phone}`}
+    aria-label={`${urgency.label}, appeler le ${urgency.phone}`}
   >
     <span class="urgent-pulse" aria-hidden="true"></span>
     <svg class="urgent-icon" width="22" height="22" viewBox="0 0 24 24" fill="none"
