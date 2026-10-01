@@ -50,7 +50,7 @@ export const siteConfig = {
       facebook:  '',
       twitter:   '',
     },
-    siret:        '000 000 000 00000',
+    siret:        '[SIRET]',
     availability: 'Disponible',
     urgency: {
       active:    true,
@@ -85,6 +85,37 @@ export const siteConfig = {
   email: {
     from: 'Contact <contact@votre-domaine.fr>', // expéditeur (domaine vérifié Resend)
     to:   '',                                   // destinataire ; vide ⇒ business.email
+  },
+
+  // ── 1-bis. MENTIONS LÉGALES (page /mentions-legales) ─────────────────────────
+  // Obligatoires pour tout site professionnel (LCEN, art. 6-III). Chaque champ
+  // entre crochets fait échouer `npm run check:ia` tant qu'il n'est pas rempli.
+  legal: {
+    formeJuridique:       '[À COMPLÉTER : SARL, SAS, EI, micro-entreprise…]',
+    capital:              '',   // ex. '5 000 €' pour une société ; vide pour une EI
+    registre:             '[À COMPLÉTER : RCS Ville 000 000 000, ou RM pour un artisan]',
+    tva:                  '[À COMPLÉTER : FR00 000000000, ou TVA non applicable, art. 293 B du CGI]',
+    directeurPublication: '[À COMPLÉTER : prénom et nom]',
+    hebergeur: {
+      nom:       '[À COMPLÉTER : nom de l\'hébergeur]',
+      adresse:   '[À COMPLÉTER : adresse postale de l\'hébergeur]',
+      telephone: '[À COMPLÉTER : téléphone de l\'hébergeur]',
+    },
+    // Clients particuliers : médiateur de la consommation obligatoire
+    // (Code de la consommation, L612-1). Clientèle uniquement pro : vider nom et site.
+    mediateur: {
+      nom:  '[À COMPLÉTER : nom du médiateur]',
+      site: '[À COMPLÉTER : adresse de son site]',
+    },
+    // Durée de conservation des messages reçus par le formulaire.
+    conservation: '3 ans après notre dernier échange',
+    // Services tiers qui reçoivent des données des visiteurs. Tenir à jour :
+    // un service ajouté au site doit apparaître ici.
+    prestataires: [
+      { nom: 'Resend',       role: 'envoi des messages du formulaire de contact', pays: 'États-Unis' },
+      { nom: 'Google Fonts', role: 'polices de caractères, reçoit l\'adresse IP des visiteurs', pays: 'États-Unis' },
+      { nom: 'unpkg',        role: 'icônes Phosphor, reçoit l\'adresse IP des visiteurs', pays: 'États-Unis' },
+    ],
   },
 
   // ── 2. BRANDING ────────────────────────────────────────────────────────────
@@ -376,9 +407,10 @@ export const siteConfig = {
         { label: 'Contact',   href: '/contact' },
       ],
       legal: [
-        { label: 'Mentions légales', href: '/mentions-legales' },
-        { label: 'CGV',              href: '/cgv' },
-        { label: 'RGPD',             href: '/rgpd' },
+        { label: 'Mentions légales',     href: '/mentions-legales' },
+        { label: 'Données personnelles', href: '/mentions-legales#donnees' },
+        // CGV : seulement si le client vend en ligne ou affiche ses conditions.
+        // Créer alors src/pages/cgv.astro AVANT d'ajouter le lien ici.
       ],
       madeBy: 'Site réalisé avec [VOTRE NOM]',
     },
@@ -421,6 +453,7 @@ export const siteConfig = {
 // ─── Re-exports nommés (compat avec les composants existants) ──────────────
 export type Variant = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 
+export const legal = siteConfig.legal;
 export const { business, branding, seo, design, features, pages, nav, content } = siteConfig;
 export const email        = siteConfig.email;
 export const variants  = siteConfig.design.variants;
