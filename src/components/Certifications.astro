@@ -14,26 +14,26 @@ import { business, certifications } from '../config/site';
     <div class="cert-a-grid">
       {business.certifications.map((cert) => (
         <div class="cert-a-card">
-          <span class="cert-icon" aria-hidden="true">{cert.icon}</span>
+          <i class={`cert-icon ph ph-${cert.icon}`} aria-hidden="true"></i>
           <h3 class="cert-label">{cert.label}</h3>
           <p class="cert-sublabel">{cert.sublabel}</p>
         </div>
       ))}
 
       <div class="cert-a-card cert-area">
-        <span class="cert-icon" aria-hidden="true">📍</span>
+        <i class="cert-icon ph ph-map-pin" aria-hidden="true"></i>
         <h3 class="cert-label">Zone d'intervention</h3>
         <p class="cert-sublabel">{business.serviceArea.join(' · ')}</p>
       </div>
 
       <div class="cert-a-card">
-        <span class="cert-icon" aria-hidden="true">📋</span>
+        <i class="cert-icon ph ph-shield-check" aria-hidden="true"></i>
         <h3 class="cert-label">Assurance RC Pro</h3>
         <p class="cert-sublabel">{business.assurance.name}</p>
       </div>
 
       <div class="cert-a-card">
-        <span class="cert-icon" aria-hidden="true">🏢</span>
+        <i class="cert-icon ph ph-buildings" aria-hidden="true"></i>
         <h3 class="cert-label">SIRET</h3>
         <p class="cert-sublabel">{business.siret}</p>
       </div>
@@ -50,12 +50,12 @@ import { business, certifications } from '../config/site';
     </div>
     <div class="cert-b-list">
       {[...business.certifications, 
-        { icon: '📍', label: "Zone d'intervention", sublabel: business.serviceArea.join(' · ') },
-        { icon: '📋', label: "Assurance RC Pro", sublabel: business.assurance.name },
-        { icon: '🏢', label: "SIRET", sublabel: business.siret }
+        { icon: 'map-pin', label: "Zone d'intervention", sublabel: business.serviceArea.join(' · ') },
+        { icon: 'shield-check', label: "Assurance RC Pro", sublabel: business.assurance.name },
+        { icon: 'buildings', label: "SIRET", sublabel: business.siret }
       ].map((cert) => (
         <div class="cert-b-item">
-          <span class="cert-b-icon">{cert.icon}</span>
+          <span class="cert-b-icon"><i class={`ph ph-${cert.icon}`} aria-hidden="true"></i></span>
           <div class="cert-b-content">
             <h3 class="cert-b-label">{cert.label}</h3>
             <p class="cert-b-sublabel">{cert.sublabel}</p>
@@ -75,12 +75,12 @@ import { business, certifications } from '../config/site';
     </div>
     <div class="cert-d-grid">
       {[...business.certifications, 
-        { icon: '📍', label: "Zone", sublabel: business.serviceArea.join(' · ') },
-        { icon: '📋', label: "RC Pro", sublabel: business.assurance.name },
-        { icon: '🏢', label: "SIRET", sublabel: business.siret }
+        { icon: 'map-pin', label: "Zone", sublabel: business.serviceArea.join(' · ') },
+        { icon: 'shield-check', label: "RC Pro", sublabel: business.assurance.name },
+        { icon: 'buildings', label: "SIRET", sublabel: business.siret }
       ].map((cert) => (
         <div class="cert-d-card">
-          <span class="cert-d-icon">{cert.icon}</span>
+          <span class="cert-d-icon"><i class={`ph ph-${cert.icon}`} aria-hidden="true"></i></span>
           <h3 class="cert-d-label">{cert.label}</h3>
           <p class="cert-d-sublabel">{cert.sublabel}</p>
         </div>
@@ -99,16 +99,16 @@ import { business, certifications } from '../config/site';
     </div>
     <div class="cert-e-list">
       {[...business.certifications, 
-        { icon: '📍', label: "Secteur", sublabel: business.serviceArea.join(' · ') },
-        { icon: '📋', label: "Assurance", sublabel: business.assurance.name },
-        { icon: '🏢', label: "SIRET", sublabel: business.siret }
+        { icon: 'map-pin', label: "Secteur", sublabel: business.serviceArea.join(' · ') },
+        { icon: 'shield-check', label: "Assurance", sublabel: business.assurance.name },
+        { icon: 'buildings', label: "SIRET", sublabel: business.siret }
       ].map((cert) => (
         <div class="cert-e-item">
           <div class="cert-e-info">
             <h3 class="cert-e-label">{cert.label}</h3>
             <p class="cert-e-sublabel">{cert.sublabel}</p>
           </div>
-          <span class="cert-e-icon">{cert.icon}</span>
+          <span class="cert-e-icon"><i class={`ph ph-${cert.icon}`} aria-hidden="true"></i></span>
         </div>
       ))}
     </div>
@@ -124,12 +124,12 @@ import { business, certifications } from '../config/site';
     </div>
     <div class="cert-f-grid">
       {[...business.certifications, 
-        { icon: '📍', label: "Zone", sublabel: business.serviceArea.join(' · ') },
-        { icon: '📋', label: "Assurance", sublabel: business.assurance.name },
-        { icon: '🏢', label: "SIRET", sublabel: business.siret }
+        { icon: 'map-pin', label: "Zone", sublabel: business.serviceArea.join(' · ') },
+        { icon: 'shield-check', label: "Assurance", sublabel: business.assurance.name },
+        { icon: 'buildings', label: "SIRET", sublabel: business.siret }
       ].map((cert) => (
         <div class="cert-f-card">
-          <div class="cert-f-icon-wrap">{cert.icon}</div>
+          <div class="cert-f-icon-wrap"><i class={`ph ph-${cert.icon}`} aria-hidden="true"></i></div>
           <div class="cert-f-info">
             <h3 class="cert-f-label">{cert.label}</h3>
             <p class="cert-f-sublabel">{cert.sublabel}</p>
@@ -149,12 +149,12 @@ import { business, certifications } from '../config/site';
     </div>
     <div class="cert-g-grid">
       {[...business.certifications, 
-        { icon: '📍', label: "Zone d'intervention", sublabel: business.serviceArea.join(' · ') },
-        { icon: '📋', label: "Assurance RC Pro", sublabel: business.assurance.name },
-        { icon: '🏢', label: "SIRET", sublabel: business.siret }
+        { icon: 'map-pin', label: "Zone d'intervention", sublabel: business.serviceArea.join(' · ') },
+        { icon: 'shield-check', label: "Assurance RC Pro", sublabel: business.assurance.name },
+        { icon: 'buildings', label: "SIRET", sublabel: business.siret }
       ].map((cert) => (
         <div class="cert-g-card">
-          <span class="cert-g-icon">{cert.icon}</span>
+          <span class="cert-g-icon"><i class={`ph ph-${cert.icon}`} aria-hidden="true"></i></span>
           <h3 class="cert-g-label">{cert.label}</h3>
           <p class="cert-g-sublabel">{cert.sublabel}</p>
         </div>
@@ -173,13 +173,13 @@ import { business, certifications } from '../config/site';
     </div>
     <div class="cert-h-grid">
       {[...business.certifications, 
-        { icon: '📍', label: "Zone d'intervention", sublabel: business.serviceArea.join(' · ') },
-        { icon: '📋', label: "Assurance RC Pro", sublabel: business.assurance.name },
-        { icon: '🏢', label: "SIRET", sublabel: business.siret }
+        { icon: 'map-pin', label: "Zone d'intervention", sublabel: business.serviceArea.join(' · ') },
+        { icon: 'shield-check', label: "Assurance RC Pro", sublabel: business.assurance.name },
+        { icon: 'buildings', label: "SIRET", sublabel: business.siret }
       ].map((cert) => (
         <div class="cert-h-card">
           <div class="cert-h-top">
-            <span class="cert-h-icon">{cert.icon}</span>
+            <span class="cert-h-icon"><i class={`ph ph-${cert.icon}`} aria-hidden="true"></i></span>
             <h3 class="cert-h-label">{cert.label}</h3>
           </div>
           <p class="cert-h-sublabel">{cert.sublabel}</p>

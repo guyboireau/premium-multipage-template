@@ -112,3 +112,14 @@ Pour toute demande d'évolution complexe ou de support technique, vous pouvez vo
 
 ---
 *Déployez des sites vitrines exceptionnels avec le minimum d'effort.*
+
+## Avant la mise en ligne d'un site client
+
+1. Copier `DESIGN.modele.md` en `DESIGN.md` et le remplir avec le client.
+2. Remplir `src/config/site.ts` : tout champ entre crochets doit disparaître.
+3. Remplacer les images `placeholder-*.png` par de vraies photos du client.
+4. Lancer `npm run check:ia` : il doit répondre « Aucun point bloquant ».
+
+Le template ne livre plus de photos générées par IA, plus d'étoiles à 5 écrites
+en dur, plus de badge « Vérifié », plus de certifications préremplies
+(RGE, Qualibat) ni d'emojis comme icônes. Les avis sont désactivés par défaut.

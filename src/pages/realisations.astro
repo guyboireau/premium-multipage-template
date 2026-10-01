@@ -34,7 +34,7 @@ const schema = {
           { label: 'Accueil', href: '/' },
           { label: pages.realisations.title },
         ]} />
-        <p class="eyebrow">— Nos réalisations</p>
+        <p class="eyebrow">Nos réalisations</p>
         <h1 class="real-h1">Nos Derniers Chantiers</h1>
         <p class="real-intro">Avant / après — chaque projet raconte une transformation.</p>
 
@@ -60,7 +60,7 @@ const schema = {
               <div class="real-meta">
                 <div class="real-chips">
                   <span class="real-chip">{item.category}</span>
-                  {item.location && <span class="real-chip real-chip--loc">📍 {item.location}</span>}
+                  {item.location && <span class="real-chip real-chip--loc"><i class="ph ph-map-pin" aria-hidden="true"></i> {item.location}</span>}
                   {item.year    && <span class="real-chip real-chip--year">{item.year}</span>}
                 </div>
                 <h2 class="real-title">{item.title}</h2>
