@@ -128,6 +128,8 @@ Hero, Services, About, Certifications, Testimonials, Pricing, FAQ, CTA, Contact 
 
 ## 🚨 Points d'attention pour l'agent IA
 
+0. **Avant toute mise en ligne : `npm run check:ia`** (`scripts/check-ia.mjs`) : bloque champ entre crochets, image `placeholder-*`, emoji, tiret long, formule creuse, avis sans note ni source réelles, `DESIGN.md` absent ou incomplet (copier `DESIGN.modele.md`). Corriger le contenu, ne jamais contourner. Étoiles : `Etoiles.astro`, calculées depuis la `note` réelle. Certifications : seulement celles détenues. Images : jamais générées par IA.
+
 1. **Astro pur, pas de React/Tailwind** : composants `.astro`, CSS scoped + tokens CSS. Ne pas introduire Tailwind ni un framework UI sans raison.
 2. **Toute la config passe par `src/config/site.ts`** : c'est le fichier à éditer pour personnaliser un client (branding, SEO, contenu, features, nav, pages). Ne pas coder de contenu en dur dans les composants.
 3. **Ajouter une page** : créer `src/pages/<slug>.astro` (importer `Layout`, `Header`, `Footer`, `Breadcrumb`), ajouter l'entrée dans `siteConfig.nav`/`pages`, et l'ajouter à `staticRoutes` dans `sitemap.xml.ts`.
