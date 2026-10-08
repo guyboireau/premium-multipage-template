@@ -1,4 +1,5 @@
 ---
+import Etoiles from './Etoiles.astro';
 // Testimonials — 3 mises en page, réparties sur les 8 variantes (A→H)
 // A (variantes A, H) : 3 cards (safe classique)
 // B (variante B)     : Citation pleine page — 1 citation grande + liste
@@ -21,9 +22,7 @@ import { testimonials } from '../config/site';
     <div class="tst-a-grid">
       {testimonials.items.map((t) => (
         <article class="card tst-a-card">
-          <div class="stars" aria-label="5 étoiles">
-            {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
-          </div>
+          <Etoiles note={t.note} classeConteneur="stars" classeEtoile="star" />
           <blockquote class="tst-a-quote">"{t.quote}"</blockquote>
           <div class="tst-a-divider"></div>
           <div class="tst-a-author">
@@ -49,9 +48,7 @@ import { testimonials } from '../config/site';
     </div>
     <div class="tst-b-right">
       <div class="tst-b-featured">
-        <div class="stars" aria-label="5 étoiles" style="margin-bottom: 20px;">
-          {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
-        </div>
+        <Etoiles note={testimonials.items[0].note} classeConteneur="stars" classeEtoile="star" style="margin-bottom: 20px;" />
         <blockquote class="tst-b-quote">"{testimonials.items[0].quote}"</blockquote>
         <div class="tst-b-author">
           <span class="tst-avatar tst-avatar-lg" aria-hidden="true">{testimonials.items[0].initial}</span>
@@ -89,9 +86,7 @@ import { testimonials } from '../config/site';
     <div class="tst-c-grid">
       {testimonials.items.map((t) => (
         <article class="tst-c-card">
-          <div class="stars" aria-label="5 étoiles">
-            {'★★★★★'.split('').map(s => <span class="star">{s}</span>)}
-          </div>
+          <Etoiles note={t.note} classeConteneur="stars" classeEtoile="star" />
           <blockquote class="tst-c-quote">"{t.quote}"</blockquote>
           <div class="tst-c-author">
             <span class="tst-avatar tst-avatar-sm" aria-hidden="true">{t.initial}</span>

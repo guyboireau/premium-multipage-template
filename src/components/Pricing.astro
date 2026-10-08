@@ -138,7 +138,7 @@ import { pricing } from '../config/site';
           <ul class="prc-e-features">
             {plan.features.map((f) => (
               <li class="prc-e-feat">
-                <span class="prc-e-check">✓</span> {f}
+                <i class="prc-e-check ph ph-check" aria-hidden="true"></i> {f}
               </li>
             ))}
           </ul>
@@ -204,7 +204,7 @@ import { pricing } from '../config/site';
     <div class="prc-g-grid">
       {pricing.plans.map((plan) => (
         <article class={`prc-g-card ${plan.highlight ? 'prc-g-card--hi' : ''}`}>
-          {plan.highlight && <div class="prc-g-badge">✦ Idéal</div>}
+          {plan.highlight && <div class="prc-g-badge">Recommandé</div>}
           <h3 class="prc-g-name">{plan.name}</h3>
           <div class="prc-g-price">
             <span class="prc-g-amount">{plan.price}</span>
